@@ -1722,7 +1722,7 @@
         </div>
         <div class="topic-body">`;
 
-      for (const q of (d.questions || [])) {
+      for (const q of [...(d.questions || [])].sort((a, b) => (b.self ?? 0) - (a.self ?? 0))) {
         const lbl = q.question_th || q.question_en || `Q${q.qid}`;
         const qPersData = JSON.stringify({
           others: q.others_avg, higher: q.higher_avg, peer: q.equal_avg, lower: q.lower_avg, self: q.self
