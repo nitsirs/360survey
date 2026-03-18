@@ -1125,8 +1125,14 @@
   // ─────────────────────────────────────────────
   function renderThemeOverview() {
     const s = currentStudent;
-    const ta = s.theme_averages || {};
+    const ta  = s.theme_averages || {};
+    const ccl = s.ccl_competencies || {};
     const themes = ['Leading Organization', 'Leading Others', 'Leading Yourself'];
+    const themeColors = {
+      'Leading Organization': '#1a4b8c',
+      'Leading Others':       '#7b5ea7',
+      'Leading Yourself':     '#2a9d8f',
+    };
 
     let html = scaleMiniHeader();
     for (const t of themes) {
@@ -1390,7 +1396,8 @@
   function renderTopicQuestions(td) {
     if (!td.questions || td.questions.length === 0) return '<div class="no-data">No question data</div>';
     let html = '';
-    for (const q of td.questions) {
+    const sorted = [...td.questions].sort((a, b) => (b.self ?? 0) - (a.self ?? 0));
+    for (const q of sorted) {
       const th = q.question_th || '';
       const en = q.question_en || '';
       const persData = JSON.stringify({
