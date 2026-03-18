@@ -698,11 +698,82 @@
     .spinner-border { width: 2.5rem; height: 2.5rem; }
 
     /* ── Responsive ── */
-    @media (max-width: 600px) {
-      .score-label { min-width: 120px; max-width: 120px; font-size: .76rem; }
-      .top-navbar .brand { font-size: .88rem; }
-      .profile-avatar { width: 52px; height: 52px; font-size: 1.5rem; }
-      .profile-name { font-size: 1.1rem; }
+
+    /* Tablet (≤ 768px) */
+    @media (max-width: 768px) {
+      .main-content { padding: 1rem .75rem 2rem; }
+
+      /* Profile card */
+      .pf-top { gap: .65rem; }
+      .pf-counts, .pf-johari { flex-wrap: wrap; gap: .3rem; }
+
+      /* Open-ended: 3-col → 1-col */
+      .oe-grid { grid-template-columns: 1fr; }
+      .oe-col { border-right: none; border-bottom: 1px solid var(--color-border); }
+      .oe-col:last-child { border-bottom: none; }
+
+      /* Johari chart+legend stack */
+      #strengthsDevContent > div { flex-direction: column !important; }
+      #strengthsDevContent > div > div:first-child { flex: unset !important; width: 100%; }
+
+      /* s13-row label wraps gracefully */
+      .s13-name { font-size: .82rem; }
+
+      /* Sec 2 sticky */
+      .bullet-scale-header { gap: .4rem; }
+    }
+
+    /* Phone (≤ 540px) */
+    @media (max-width: 540px) {
+      .top-navbar { padding: 0 .75rem; }
+      .top-navbar .brand { font-size: .82rem; }
+      .top-navbar select#studentSelect { max-width: 180px; font-size: .8rem; }
+
+      /* Profile card */
+      .profile-card { padding: .8rem 1rem .9rem; border-radius: 10px 10px 0 0; }
+      #themeOverview { padding: .6rem 1rem .8rem; border-radius: 0 0 10px 10px; }
+      .pf-avatar { width: 38px; height: 38px; font-size: 1rem; }
+      .pf-name { font-size: .9rem; }
+      .pf-sub  { font-size: .7rem; }
+      .pf-pill { font-size: .68rem; }
+      .pf-jchip { font-size: .68rem; padding: .12rem .4rem; }
+
+      /* Section nav */
+      .section-nav-tabs button { font-size: .75rem; padding: .28rem .6rem; }
+
+      /* Report sections */
+      .report-section { padding: 1rem .85rem; border-radius: 10px; }
+      .section-title { font-size: 1rem; }
+      .section-subtitle { font-size: .75rem; }
+
+      /* Competency detail: hide hm-cells on small screens, expand bullet */
+      .hm-cells { display: none !important; }
+      .hm-cells2 { display: none !important; }
+      .bullet-wrap { flex: 1 !important; }
+      .bullet-scale-header .hm-cells { display: none !important; }
+      .scale-name-spacer { min-width: 0; width: 0; }
+      .cf-icon { display: none; }
+
+      /* Topic/q rows */
+      .topic-row, .q-row { padding: .28rem .5rem .28rem .6rem; gap: .4rem; }
+      .topic-name { font-size: .83rem; }
+      .q-text-th  { font-size: .78rem; }
+
+      /* Edmondson 3-col */
+      .edm3-cols { gap: .35rem; }
+      .edm3-col  { width: 90px; }
+      .edm3-col-head { width: 90px; font-size: .7rem; }
+      .edm3-dim-row, .edm3-q-row { padding-left: .5rem; padding-right: .5rem; gap: .35rem; }
+      .edm3-label.q-text-th { font-size: .76rem; }
+
+      /* Scale mini header */
+      .scale-mini { padding: .1rem .5rem .2rem; }
+      .s13-row { padding: .28rem .5rem; }
+      .s13-name { font-size: .8rem; }
+
+      /* Open-ended */
+      .oe-block-header { padding: .5rem .75rem; }
+      .oe-col { padding: .55rem .7rem; }
     }
 
     /* ── Score chip (inside topic header) ── */
@@ -900,7 +971,6 @@
   // ─────────────────────────────────────────────
   let reportData = null;
   let currentStudent = null;
-  let radarChartInstance = null;
   let johariChartInstance = null;
   let perspectiveChartInstance = null;
 
@@ -939,7 +1009,7 @@
     currentStudent = reportData.students[idx];
     document.getElementById('studentSelect').value = idx;
     renderProfile();
-    renderRadar();
+    renderThemeOverview();
     renderCompetencyDetail();
     renderStrengthsDev();
     renderEdmondson();
@@ -1004,34 +1074,6 @@
     const ec = s.evaluator_counts;
     const initials = (s.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
 
-    // ── Theme scores ──
-    const themes = [
-      { key: 'Leading Organization', short: 'Leading Organization' },
-      { key: 'Leading Others',       short: 'Leading Others' },
-      { key: 'Leading Yourself',     short: 'Leading Yourself' },
-    ];
-    const ta = s.theme_averages || {};
-    const pct = v => v != null ? Math.max(0, Math.min(100, (v - 1) / 4 * 100)).toFixed(1) : 0;
-    const f1  = v => v != null ? v.toFixed(1) : '—';
-
-    const themeRows = themes.map(t => {
-      const d = ta[t.key] || {};
-      const oPct = pct(d.others_avg);
-      const sPct = pct(d.self_avg);
-      return `
-        <div class="pf-theme-row">
-          <div class="pf-theme-lbl">${t.short}</div>
-          <div class="pf-track">
-            <div class="pf-bar" style="width:${oPct}%"></div>
-            ${d.self_avg != null ? `<div class="pf-tick" style="left:${sPct}%"></div>` : ''}
-          </div>
-          <div class="pf-scores">
-            <span class="o">Others: ${f1(d.others_avg)}</span>
-            <span class="s">Self: ${f1(d.self_avg)}</span>
-          </div>
-        </div>`;
-    }).join('');
-
     // ── Johari quadrant counts (individual median) ──
     const ccl = s.ccl_competencies || {};
     const allO = [], allSelf = [];
@@ -1075,83 +1117,27 @@
           <span class="pf-jchip cs">✅ ${counts.cs} Strength</span>
           <span class="pf-jchip da">🛠️ ${counts.da} Dev</span>
         </div>
-      </div>
-      <div class="pf-themes">${themeRows}</div>`;
+      </div>`;
   }
 
   // ─────────────────────────────────────────────
-  // Section 1: Radar Chart
+  // Theme Overview (inside profile card area)
   // ─────────────────────────────────────────────
-  function renderRadar() {
+  function renderThemeOverview() {
     const s = currentStudent;
-    const ta = s.theme_averages;
+    const ta = s.theme_averages || {};
     const themes = ['Leading Organization', 'Leading Others', 'Leading Yourself'];
 
-    const othersData = themes.map(t => ta[t]?.others_avg ?? 0);
-    const selfData   = themes.map(t => ta[t]?.self_avg   ?? 0);
-
-    if (radarChartInstance) radarChartInstance.destroy();
-    const ctx = document.getElementById('radarChart').getContext('2d');
-    radarChartInstance = new Chart(ctx, {
-      type: 'radar',
-      data: {
-        labels: themes.map(t => t.replace(' ', '\n')),
-        datasets: [
-          {
-            label: 'Others Avg',
-            data: othersData,
-            backgroundColor: 'rgba(45,125,210,.18)',
-            borderColor: 'rgba(45,125,210,.9)',
-            borderWidth: 2.5,
-            pointBackgroundColor: 'rgba(45,125,210,.9)',
-            pointRadius: 5,
-          },
-          {
-            label: 'Self',
-            data: selfData,
-            backgroundColor: 'rgba(255,107,53,.12)',
-            borderColor: 'rgba(255,107,53,.9)',
-            borderWidth: 2,
-            pointBackgroundColor: 'rgba(255,107,53,.9)',
-            pointRadius: 4,
-            borderDash: [4, 3],
-          }
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          r: {
-            min: 1,
-            max: 5,
-            ticks: { stepSize: 1, font: { size: 10 } },
-            pointLabels: { font: { size: 11, family: 'Sarabun' }, color: '#1f2d3d' },
-            grid: { color: 'rgba(0,0,0,.08)' },
-          }
-        },
-        plugins: {
-          legend: { position: 'bottom', labels: { font: { size: 11, family: 'Sarabun' }, padding: 16 } },
-          tooltip: {
-            callbacks: {
-              label: ctx => `${ctx.dataset.label}: ${ctx.parsed.r.toFixed(2)}`
-            }
-          }
-        }
-      }
-    });
-
-    // Table on the right — bullet chart rows
     let html = scaleMiniHeader();
     for (const t of themes) {
       const oa = ta[t]?.others_avg;
       const sa = ta[t]?.self_avg;
-      const shortName = t.replace('Leading ', '');
       html += `<div class="s13-row">
-        <div class="s13-label"><div class="s13-name">${shortName}</div></div>
+        <div class="s13-label"><div class="s13-name">${t}</div></div>
         ${makeBullet2(oa, sa)}
       </div>`;
     }
-    document.getElementById('themeAvgTable').innerHTML = html;
+    document.getElementById('themeOverview').innerHTML = html;
   }
 
   // ─────────────────────────────────────────────
