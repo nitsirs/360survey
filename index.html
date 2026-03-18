@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCL 360-Degree Leadership Assessment Report</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --color-primary:    #1a4b8c;
+      --color-secondary:  #2d7dd2;
+      --color-accent:     #f0a500;
+      --color-success:    #2e8b57;
+      --color-warning:    #e8a217;
+      --color-danger:     #c0392b;
+      --color-bg:         #f4f7fb;
+      --color-card:       #ffffff;
+      --color-border:     #dce4ef;
+      --color-text:       #1f2d3d;
+      --color-muted:      #6c7d8e;
+      --color-high:       #34a853;
+      --color-mid:        #f9ab00;
+      --color-low:        #ea4335;
+      --bar-h:            22px;
+      --sidebar-width:    280px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      margin: 0;
+    }
+
+    /* ── Navbar ── */
+    .top-navbar {
+      background: var(--color-primary);
+      color: #fff;
+      padding: 0 1.5rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .top-navbar .brand {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .top-navbar .brand .badge-ccl {
+      background: var(--color-accent);
+      color: #1a1a1a;
+      font-size: .65rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .top-navbar select#studentSelect {
+      max-width: 320px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: .9rem;
+      border-radius: 8px;
+      padding: .35rem .75rem;
+      background: rgba(255,255,255,.95);
+      border: none;
+      color: var(--color-text);
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(0,0,0,.15);
+    }
+
+    /* ── Main layout ── */
+    .main-content {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    /* ── Section wrappers ── */
+    .report-section {
+      background: var(--color-card);
+      border-radius: 12px;
+      border: 1px solid var(--color-border);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: 1.2rem;
+    }
+    .section-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .icon-blue   { background: var(--color-secondary); }
+    .icon-green  { background: var(--color-success); }
+    .icon-orange { background: var(--color-accent); color: #1a1a1a !important; }
+    .icon-purple { background: #7b5ea7; }
+    .icon-teal   { background: #2a9d8f; }
+    .icon-red    { background: var(--color-danger); }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin: 0;
+    }
+    .section-subtitle {
+      font-size: .8rem;
+      color: var(--color-muted);
+      margin: 0;
+    }
+
+    /* ── Student Profile Card ── */
+    .profile-card {
+      background: linear-gradient(135deg, var(--color-primary) 0%, #2563eb 100%);
+      color: #fff;
+      border-radius: 12px;
+      padding: 1rem 1.5rem 1.1rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 3px 12px rgba(26,75,140,.25);
+    }
+    .pf-top {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: .7rem; flex-wrap: wrap;
+    }
+    .pf-avatar {
+      width: 46px; height: 46px; flex-shrink: 0;
+      background: rgba(255,255,255,.2);
+      border: 2px solid rgba(255,255,255,.4);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; font-weight: 700;
+    }
+    .pf-identity { flex: 1; min-width: 0; }
+    .pf-name { font-size: 1.05rem; font-weight: 700; }
+    .pf-sub  { font-size: .76rem; opacity: .72; margin-top: .1rem; display: flex; gap: .7rem; flex-wrap: wrap; }
+    .pf-counts { display: flex; gap: .35rem; flex-wrap: wrap; }
+    .pf-pill {
+      background: rgba(255,255,255,.18); border-radius: 5px;
+      padding: .1rem .45rem; font-size: .72rem; font-weight: 600;
+    }
+    .pf-johari { display: flex; gap: .35rem; flex-wrap: wrap; align-items: center; }
+    .pf-jchip {
+      border-radius: 6px; padding: .18rem .55rem;
+      font-size: .73rem; font-weight: 700;
+    }
+    .pf-jchip.bs { background: rgba(254,215,170,.92); color: #9a3412; }
+    .pf-jchip.hs { background: rgba(167,243,208,.92); color: #065f46; }
+    .pf-jchip.cs { background: rgba(191,219,254,.92); color: #1e3a8a; }
+    .pf-jchip.da { background: rgba(226,232,240,.92); color: #334155; }
+
+    /* ── Score bar ── */
+    .score-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin-bottom: .45rem;
+      font-size: .88rem;
+    }
+    .score-label {
+      min-width: 260px;
+      max-width: 340px;
+      white-space: normal;
+      overflow: visible;
+      font-size: .84rem;
+      color: var(--color-text);
+      line-height: 1.4;
+    }
+    .score-bar-wrap {
+      flex: 1;
+      background: #e8edf3;
+      border-radius: 6px;
+      height: var(--bar-h);
+      position: relative;
+      overflow: visible;
+      min-width: 80px;
+    }
+    .score-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width .4s ease;
+      position: relative;
+    }
+    .score-bar-fill.green  { background: var(--color-high); }
+    .score-bar-fill.yellow { background: var(--color-mid); }
+    .score-bar-fill.red    { background: var(--color-low); }
+    .score-bar-fill.blue   { background: var(--color-secondary); }
+    .score-bar-fill.grey   { background: #a0aec0; }
+
+    /* Self marker */
+    .self-marker {
+      position: absolute;
+      top: -3px;
+      width: 4px;
+      height: calc(var(--bar-h) + 6px);
+      background: #ff6b35;
+      border-radius: 2px;
+      z-index: 5;
+    }
+    .self-marker::after {
+      content: 'S';
+      position: absolute;
+      top: -14px;
+      left: -3px;
+      font-size: 9px;
+      font-weight: 700;
+      color: #ff6b35;
+    }
+
+    .score-value {
+      min-width: 32px;
+      text-align: right;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+    .score-n { min-width: 30px; font-size: .75rem; color: var(--color-muted); }
+
+    /* ── Perspective toggle ── */
+    .persp-toggle { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .persp-btn {
+      padding: .32rem .9rem;
+      border-radius: 20px;
+      border: 1.5px solid var(--color-border);
+      background: #fff;
+      font-family: 'Sarabun', sans-serif;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      color: var(--color-muted);
+    }
+    .persp-btn:hover { border-color: #90afd4; color: var(--color-primary); }
+    .persp-btn.active { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+    .persp-btn.pb-higher.active { background: #0d6efd; border-color: #0d6efd; }
+    .persp-btn.pb-peer.active   { background: #198754; border-color: #198754; }
+    .persp-btn.pb-lower.active  { background: #c97700; border-color: #c97700; }
+
+    /* ── Sticky control bar ── */
+    .sec2-sticky {
+      position: sticky;
+      top: 60px;
+      z-index: 20;
+      background: var(--color-card);
+      padding: .5rem 0 0;
+      margin-bottom: .4rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .scale-name-spacer { flex: 1; }
+    .scale-labels {
+      flex: 0 0 140px;
+      display: flex;
+      justify-content: space-between;
+      font-size: .68rem;
+      font-weight: 600;
+      color: #a0b0c8;
+      padding: 0 .1rem;
+    }
+    .scale-scores-header {
+      display: flex;
+      gap: .5rem;
+      flex: 0 0 auto;
+    }
+    .scale-scores-header .ts-item { min-width: 36px; }
+
+    /* ── Theme block ── */
+    .theme-block {
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+      margin-bottom: 1.2rem;
+    }
+
+    .topic-body { display: none; }
+    .topic-body.open { display: block; }
+
+    /* ── All rows: flex with fixed column widths ── */
+    .topic-row, .q-row, .bullet-scale-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .28rem 1rem .28rem 1.1rem;
+    }
+    .q-row { padding-top: .18rem; padding-bottom: .18rem; background: #f6f8fc; }
+
+    .topic-row {
+      cursor: pointer;
+      user-select: none;
+      transition: background .15s;
+    }
+    .topic-row:hover { background: #f4f7fc; }
+    .topic-row.active { background: #eef3fb; }
+    .topic-name { font-size: .92rem; font-weight: 700; flex: 1; min-width: 0; color: var(--color-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .q-text-th  { flex: 1; min-width: 0; font-size: .8rem; color: var(--color-muted); font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .topic-chevron { transition: transform .2s; color: var(--color-muted); font-size: .8rem; flex: 0 0 14px; text-align: center; }
+    .topic-chevron.open { transform: rotate(180deg); }
+    .topic-body {
+      display: none;
+      padding: 0;
+      background: #f6f8fc;
+      border-top: none;
+    }
+    .topic-body.open { display: block; }
+
+    /* ── Bullet track ── */
+    .bullet-wrap {
+      flex: 0 0 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0;
+    }
+    .bullet-track {
+      position: relative;
+      height: 8px;
+      background: #e4eaf3;
+      border-radius: 4px;
+    }
+    .bullet-bar {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--color-secondary);
+      transition: width .35s cubic-bezier(.4,0,.2,1);
+    }
+    .bullet-self {
+      position: absolute;
+      top: -5px;
+      width: 3px;
+      height: calc(100% + 10px);
+      background: #1a3a5c;
+      border-radius: 2px;
+      transform: translateX(-50%);
+      transition: left .35s cubic-bezier(.4,0,.2,1);
+      z-index: 2;
+    }
+    /* gap zone — same height as tick, sits behind bar */
+    .bullet-gap {
+      position: absolute;
+      top: -5px;
+      height: calc(100% + 10px);
+      border-radius: 3px;
+      transition: left .35s cubic-bezier(.4,0,.2,1), width .35s cubic-bezier(.4,0,.2,1);
+      z-index: 0;
+    }
+    /* Blind spot: Self rated higher than Others → red */
+    .bullet-gap.gap-blind-spot      { background: linear-gradient(to right, rgba(220,60,60,.20), rgba(220,60,60,.55)); }
+    /* Hidden strength: Others rated higher than Self → green */
+    .bullet-gap.gap-hidden-strength { background: linear-gradient(to right, rgba(46,160,80,.20), rgba(46,160,80,.55)); }
+    /* Neutral gap (small difference, no strong classification) */
+    .bullet-gap.gap-neutral         { background: rgba(0,0,0,.07); }
+    .bullet-bar  { z-index: 1; position: relative; }
+    .bullet-self { z-index: 2; }
+
+    /* ── Edmondson 3-column layout ── */
+    .edm3-header {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .3rem 1rem .45rem;
+      border-bottom: 2px solid var(--color-border);
+      position: sticky; top: 60px; background: #fff; z-index: 9;
+    }
+    .edm3-label { flex: 1; min-width: 0; }
+    .edm3-cols  { display: flex; gap: .6rem; }
+    .edm3-col-head {
+      width: 118px; text-align: center; font-size: .78rem;
+      font-weight: 700; padding: .1rem 0;
+    }
+    .edm3-dim-row {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .42rem 1rem; border-bottom: 1px solid var(--color-border);
+      cursor: pointer;
+    }
+    .edm3-dim-row:hover { background: #f8fafd; }
+    .edm3-q-row {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .28rem 1rem .28rem 1.5rem;
+      border-bottom: 1px solid rgba(220,228,239,.6);
+    }
+    .edm3-col {
+      width: 118px; display: flex; align-items: center; gap: .35rem;
+    }
+    .edm3-col .bullet-track { flex: 1; }
+    .edm3-score {
+      flex: 0 0 26px; text-align: right;
+      font-size: .76rem; font-weight: 700; color: #374151;
+    }
+    .track-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: .64rem;
+      color: #b0bccc;
+      padding: 0 .1rem;
+    }
+    .track-scores {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      flex: 0 0 auto;
+    }
+    .ts-item {
+      display: flex; flex-direction: column; align-items: center;
+      font-size: .7rem; line-height: 1.2;
+      min-width: 36px;
+    }
+    .ts-label { font-size: .6rem; color: var(--color-muted); font-weight: 500; }
+    .ts-val { font-weight: 700; font-size: .82rem; }
+    .ts-val.db-green  { color: var(--color-high); }
+    .ts-val.db-yellow { color: #c97700; }
+    .ts-val.db-grey   { color: #888; }
+    .ts-val.db-dark   { color: #1a3a5c; font-weight: 700; }
+
+    /* ── Conditional formatting icon (outside chip) ── */
+    .cf-icon { font-size: .82rem; line-height: 1; flex: 0 0 18px; text-align: center; }
+
+    /* ── Heatmap chips ── */
+    .hm-cells {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      flex: 0 0 auto;
+      width: 203px; /* 5 chips × 34px + 4 gaps × 3px + 18px icon + 3px gap */
+    }
+    .hm-chip {
+      min-width: 34px;
+      text-align: center;
+      font-size: .76rem;
+      font-weight: 600;
+      padding: 2px 4px;
+      border-radius: 4px;
+      line-height: 1.4;
+    }
+    /* Plain score columns — clean, no color fill */
+    .hm-plain { background: transparent; color: #374151; font-weight: 600; }
+    /* Self cell — conditional formatting states */
+    .hm-self-default    { background: #eef2f8; color: #1a3a5c; font-weight: 700;
+                          outline: 2px solid rgba(26,58,92,.2); outline-offset: -2px; border-radius: 4px; }
+    .hm-blind-spot      { background: #ffedd5; color: #9a3412; font-weight: 700; } /* orange-100 */
+    .hm-hidden-strength { background: #ccfbf1; color: #115e59; font-weight: 700; } /* teal-100  */
+    .hm-conf-strength   { background: #dbeafe; color: #1e40af; font-weight: 700; } /* blue-100  */
+    .hm-conf-weakness   { background: #f1f5f9; color: #475569; font-weight: 700; } /* slate-100 */
+    .hm-header {
+      min-width: 34px;
+      text-align: center;
+      font-size: .62rem;
+      font-weight: 700;
+      color: var(--color-muted);
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    /* ── Expanded question rows ── */
+    .q-row .ts-val   { font-size: .72rem; }
+    .q-row .ts-label { font-size: .56rem; }
+    .q-row .bullet-track { height: 6px; }
+    .q-row .bullet-gap   { top: -3px; height: calc(100% + 6px); }
+    .q-row .bullet-self  { top: -3px; height: calc(100% + 6px); }
+    .q-row > span:last-child { flex: 0 0 14px; min-width: 14px; }
+
+    /* ── Sections 1 & 3 — shared compact bullet rows ── */
+    .s13-row {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .32rem .25rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .s13-row:last-child { border-bottom: none; }
+    .s13-label { flex: 1; min-width: 0; overflow: hidden; }
+    .s13-name  { font-size: .88rem; font-weight: 600; color: var(--color-text);
+                 white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .s13-sub   { font-size: .73rem; color: var(--color-muted); }
+    .s13-rank  { font-size: .72rem; font-weight: 700; color: var(--color-muted); margin-right: .3rem; }
+    /* 2-chip cell: All + Self + icon = 34+3+34+3+18 = 92px */
+    .hm-cells2 { display: flex; align-items: center; gap: 3px; width: 92px; flex: 0 0 92px; }
+    /* Mini scale header row */
+    .scale-mini { display: flex; align-items: center; gap: .75rem; padding: .1rem .25rem .28rem; }
+    .scale-mini-spacer { flex: 1; }
+    .theme-section-title {
+      font-size: .78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--color-muted);
+      margin: .8rem 0 .5rem;
+      padding-bottom: .3rem;
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    /* ── Strength/Dev tags ── */
+    .strength-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      background: #eaf7ef;
+      border: 1px solid #b5dfc5;
+      color: var(--color-success);
+      border-radius: 6px;
+      padding: .25rem .6rem;
+      font-size: .8rem;
+      font-weight: 600;
+      margin: .2rem .2rem .2rem 0;
+    }
+    .dev-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      background: #fef3e9;
+      border: 1px solid #f5c3a3;
+      color: #c95e1a;
+      border-radius: 6px;
+      padding: .25rem .6rem;
+      font-size: .8rem;
+      font-weight: 600;
+      margin: .2rem .2rem .2rem 0;
+    }
+    .blind-tag {
+      background: #fff3cd;
+      border-color: #ffc107;
+      color: #856404;
+    }
+    .hidden-tag {
+      background: #e8f4fd;
+      border-color: #90caf9;
+      color: #1565c0;
+    }
+
+    /* ── Perspective breakdown ── */
+    .perspective-select {
+      max-width: 340px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: .9rem;
+    }
+
+    /* ── Feedback text ── */
+    .feedback-block {
+      margin-bottom: 1.2rem;
+    }
+    .feedback-level-label {
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--color-muted);
+      margin-bottom: .3rem;
+    }
+    .feedback-text-item {
+      background: #f8fafc;
+      border-left: 3px solid var(--color-secondary);
+      padding: .5rem .75rem;
+      margin-bottom: .4rem;
+      border-radius: 0 6px 6px 0;
+      font-size: .88rem;
+      line-height: 1.6;
+    }
+    .feedback-text-item.higher { border-left-color: #7b5ea7; }
+    .feedback-text-item.equal  { border-left-color: var(--color-secondary); }
+    .feedback-text-item.lower  { border-left-color: var(--color-success); }
+    .feedback-text-item.self   { border-left-color: #ff6b35; }
+
+    /* ── Open-ended 3-column layout ── */
+    .oe-block {
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .oe-block-header {
+      padding: .6rem 1rem;
+      background: #f4f7fb;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .oe-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .oe-col {
+      padding: .7rem .9rem;
+      border-right: 1px solid var(--color-border);
+    }
+    .oe-col:last-child { border-right: none; }
+    .oe-col-head {
+      font-size: .72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .07em; margin-bottom: .5rem; padding-bottom: .3rem;
+      border-bottom: 2px solid currentColor;
+    }
+    .oe-col-head.boss { color: #0d6efd; }
+    .oe-col-head.peer { color: #198754; }
+    .oe-col-head.sub  { color: #c97700; }
+    .oe-item {
+      font-size: .85rem; line-height: 1.6;
+      padding: .4rem .6rem; margin-bottom: .35rem;
+      border-radius: 6px; background: #f8fafc;
+      border-left: 3px solid currentColor;
+    }
+    .oe-item.boss { color: inherit; border-color: #0d6efd; }
+    .oe-item.peer { color: inherit; border-color: #198754; }
+    .oe-item.sub  { color: inherit; border-color: #c97700; }
+    .oe-empty {
+      font-size: .82rem; color: var(--color-muted); font-style: italic;
+    }
+
+    /* ── Overall Ratings ── */
+    .rating-dist {
+      display: flex;
+      gap: 2px;
+      height: 32px;
+      margin-top: .25rem;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .rating-dist-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .72rem;
+      font-weight: 700;
+      color: #fff;
+      min-width: 4px;
+      transition: width .3s;
+    }
+
+    /* ── Legend ── */
+    .score-legend {
+      display: flex;
+      gap: .8rem;
+      flex-wrap: wrap;
+      font-size: .78rem;
+      color: var(--color-muted);
+      margin-bottom: 1rem;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      display: inline-block;
+      margin-right: 3px;
+    }
+
+    /* ── Chart containers ── */
+    .chart-container {
+      position: relative;
+    }
+    #radarChart, #perspectiveChart {
+      max-height: 340px;
+    }
+
+    /* ── No-data placeholder ── */
+    .no-data {
+      text-align: center;
+      color: var(--color-muted);
+      padding: 2rem 0;
+      font-size: .9rem;
+    }
+    .no-data i { font-size: 2rem; display: block; margin-bottom: .5rem; opacity: .4; }
+
+    /* ── Loading ── */
+    #loadingOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-size: 1.1rem;
+      color: var(--color-primary);
+      flex-direction: column;
+      gap: .7rem;
+    }
+    .spinner-border { width: 2.5rem; height: 2.5rem; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .score-label { min-width: 120px; max-width: 120px; font-size: .76rem; }
+      .top-navbar .brand { font-size: .88rem; }
+      .profile-avatar { width: 52px; height: 52px; font-size: 1.5rem; }
+      .profile-name { font-size: 1.1rem; }
+    }
+
+    /* ── Score chip (inside topic header) ── */
+    .score-chip {
+      font-size: .78rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-left: .5rem;
+      white-space: nowrap;
+    }
+    .chip-green  { background: #d1f5e0; color: #1b7440; }
+    .chip-yellow { background: #fff3cc; color: #7a5c00; }
+    .chip-red    { background: #fde8e6; color: #a0200f; }
+    .chip-grey   { background: #e8edf3; color: #606060; }
+
+    .gap-chip {
+      font-size: .75rem;
+      padding: 2px 7px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    .gap-pos { background: #e8f4fd; color: #1565c0; }
+    .gap-neg { background: #fff3cd; color: #856404; }
+
+    /* ── Tab navigation for sections ── */
+    .section-nav-tabs {
+      display: flex;
+      gap: .3rem;
+      overflow-x: auto;
+      margin-bottom: 1.2rem;
+      padding-bottom: .2rem;
+    }
+    .section-nav-tabs button {
+      white-space: nowrap;
+      border: 1px solid var(--color-border);
+      background: #fff;
+      border-radius: 8px;
+      padding: .35rem .8rem;
+      font-size: .82rem;
+      color: var(--color-text);
+      cursor: pointer;
+      font-family: 'Sarabun', sans-serif;
+      transition: all .15s;
+    }
+    .section-nav-tabs button.active {
+      background: var(--color-primary);
+      color: #fff;
+      border-color: var(--color-primary);
+    }
+
+    /* ── Cols label ── */
+    .level-label-row {
+      display: flex;
+      gap: .5rem;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--color-muted);
+      margin-bottom: .3rem;
+      margin-left: 210px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    /* mini pills */
+    .mini-pill {
+      font-size: .72rem;
+      border-radius: 10px;
+      padding: 1px 7px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .pill-higher { background: #ede7f6; color: #4527a0; }
+    .pill-equal  { background: #e3f2fd; color: #0d47a1; }
+    .pill-lower  { background: #e8f5e9; color: #1b5e20; }
+    .pill-self   { background: #fff3e0; color: #e65100; }
+  </style>
+</head>
+
+<body>
+  <!-- Loading -->
+  <div id="loadingOverlay">
+    <div class="spinner-border text-primary" role="status"></div>
+    <span>กำลังโหลดข้อมูล...</span>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="top-navbar">
+    <div class="brand">
+      <span class="badge-ccl">CCL</span>
+      360-Degree Leadership Assessment
+    </div>
+    <select id="studentSelect" title="Select student"></select>
+  </nav>
+
+  <!-- Main content -->
+  <div class="main-content" id="mainContent" style="display:none">
+
+    <!-- Profile Card + Theme Overview -->
+    <div class="profile-card" id="profileCard"></div>
+    <div id="themeOverview" style="background:#fff;border:1px solid var(--color-border);border-top:none;border-radius:0 0 12px 12px;padding:.75rem 1.5rem 1rem;margin-top:-14px;margin-bottom:1.5rem"></div>
+
+    <!-- Section nav -->
+    <div class="section-nav-tabs" id="sectionNav">
+      <button onclick="scrollToSection('sec2')" class="active">Competency Detail</button>
+      <button onclick="scrollToSection('sec3')">Strengths & Development</button>
+      <button onclick="scrollToSection('sec5')">Team Health</button>
+      <button onclick="scrollToSection('sec6')">Open-ended Feedback</button>
+    </div>
+
+    <!-- Section 1: Competency Detail -->
+    <div class="report-section" id="sec2">
+      <div class="section-header">
+        <div class="section-icon icon-purple"><i class="bi bi-list-check"></i></div>
+        <div>
+          <div class="section-title">Section 1 — Competency Detail</div>
+          <div class="section-subtitle">Select a perspective to compare with Self — click any topic to expand individual questions</div>
+        </div>
+      </div>
+      <!-- Legend -->
+      <div class="d-flex gap-3 mb-2 flex-wrap" style="font-size:.78rem;color:var(--color-muted)">
+        <span><span style="display:inline-block;width:26px;height:8px;border-radius:4px;background:var(--color-secondary);vertical-align:middle;margin-right:4px"></span>Others</span>
+        <span><span style="display:inline-block;width:3px;height:14px;border-radius:2px;background:#1a3a5c;vertical-align:middle;margin-right:4px"></span>Self</span>
+        <span style="color:var(--color-high)"><strong>Green Self</strong> = others rated you higher</span>
+        <span style="color:#c97700"><strong>Yellow Self</strong> = you rated yourself higher</span>
+      </div>
+      <!-- Sticky control bar: perspective toggle + scale header -->
+      <div class="sec2-sticky">
+        <div class="persp-toggle" style="margin-bottom:.4rem">
+          <button class="persp-btn pb-all active" onclick="setPerspective('others',this)">◉ All Others</button>
+          <button class="persp-btn pb-higher" onclick="setPerspective('higher',this)">↑ Boss</button>
+          <button class="persp-btn pb-peer"   onclick="setPerspective('peer',this)">= Peer</button>
+          <button class="persp-btn pb-lower"  onclick="setPerspective('lower',this)">↓ Sub.</button>
+        </div>
+        <div class="bullet-scale-header">
+          <div class="scale-name-spacer"></div>
+          <div class="scale-labels"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+          <div class="hm-cells" style="gap:3px">
+            <div class="hm-header" data-hm-header="others">All</div>
+            <div class="hm-header" data-hm-header="higher">Boss</div>
+            <div class="hm-header" data-hm-header="peer">Peer</div>
+            <div class="hm-header" data-hm-header="lower">Sub</div>
+            <div class="hm-header" data-hm-header="self" style="color:#1a3a5c">Self</div>
+            <div style="flex:0 0 18px"></div>
+          </div>
+          <div style="flex:0 0 14px"></div>
+        </div>
+      </div>
+      <div id="competencyDetail"></div>
+    </div>
+
+    <!-- Section 3: Top Strengths & Dev Areas -->
+    <div class="report-section" id="sec3">
+      <div class="section-header">
+        <div class="section-icon icon-green"><i class="bi bi-graph-up-arrow"></i></div>
+        <div>
+          <div class="section-title">Section 2 — Strengths & Development Areas</div>
+          <div class="section-subtitle">Based on others' average scores · Blind spots and hidden strengths</div>
+        </div>
+      </div>
+      <div id="strengthsDevContent"></div>
+    </div>
+
+    <!-- Section 5: Team Health -->
+    <div class="report-section" id="sec5">
+      <div class="section-header">
+        <div class="section-icon icon-teal"><i class="bi bi-heart-pulse"></i></div>
+        <div>
+          <div class="section-title">Section 3 — Team Health (Edmondson)</div>
+          <div class="section-subtitle">5 dimensions: Psychological Safety, Dependability, Clarity, Meaning, Impact</div>
+        </div>
+      </div>
+      <div id="edmondsonContent"></div>
+    </div>
+
+    <!-- Section 6: Open-ended Feedback -->
+    <div class="report-section" id="sec6">
+      <div class="section-header">
+        <div class="section-icon icon-blue"><i class="bi bi-chat-quote"></i></div>
+        <div>
+          <div class="section-title">Section 4 — Open-ended Feedback</div>
+          <div class="section-subtitle">Qualitative responses grouped by question and evaluator level</div>
+        </div>
+      </div>
+      <div id="openEndedContent"></div>
+    </div>
+
+  </div><!-- /main-content -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+  // ─────────────────────────────────────────────
+  // State
+  // ─────────────────────────────────────────────
+  let reportData = null;
+  let currentStudent = null;
+  let radarChartInstance = null;
+  let johariChartInstance = null;
+  let perspectiveChartInstance = null;
+
+  // ─────────────────────────────────────────────
+  // Load data
+  // ─────────────────────────────────────────────
+  async function init() {
+    try {
+      const resp = await fetch('report_data.json');
+      if (!resp.ok) throw new Error('Cannot load report_data.json');
+      reportData = await resp.json();
+      populateStudentDropdown();
+      selectStudent(0);
+      document.getElementById('loadingOverlay').style.display = 'none';
+      document.getElementById('mainContent').style.display = '';
+    } catch (err) {
+      document.getElementById('loadingOverlay').innerHTML =
+        `<i class="bi bi-exclamation-triangle" style="font-size:2.5rem;color:#c0392b"></i>
+         <span style="color:#c0392b;font-weight:600">Error loading data: ${err.message}</span>
+         <small style="color:#666">Make sure report_data.json is in the same folder as index.html</small>`;
+    }
+  }
+
+  function populateStudentDropdown() {
+    const sel = document.getElementById('studentSelect');
+    reportData.students.forEach((s, i) => {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = `${s.name}  (${s.nickname})`;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change', () => selectStudent(+sel.value));
+  }
+
+  function selectStudent(idx) {
+    currentStudent = reportData.students[idx];
+    document.getElementById('studentSelect').value = idx;
+    renderProfile();
+    renderRadar();
+    renderCompetencyDetail();
+    renderStrengthsDev();
+    renderEdmondson();
+    renderOpenEnded();
+  }
+
+  // ─────────────────────────────────────────────
+  // Helpers
+  // ─────────────────────────────────────────────
+  function fmt(v, decimals = 2) {
+    if (v === null || v === undefined) return '—';
+    return (+v).toFixed(decimals);
+  }
+
+  function scoreColor(v) {
+    if (v === null || v === undefined) return 'grey';
+    if (v >= 4.0) return 'green';
+    if (v >= 3.0) return 'yellow';
+    return 'red';
+  }
+
+  function scoreChipClass(v) {
+    if (v === null || v === undefined) return 'chip-grey';
+    if (v >= 4.0) return 'chip-green';
+    if (v >= 3.0) return 'chip-yellow';
+    return 'chip-red';
+  }
+
+  function barPct(v, max = 5) {
+    if (v === null || v === undefined) return 0;
+    return Math.max(0, Math.min(100, (v / max) * 100));
+  }
+
+  function makeScoreRow(label, othersAvg, selfScore, showSelf = true, nOthers = null, subtitle = null) {
+    const pct = barPct(othersAvg);
+    const col = scoreColor(othersAvg);
+    const selfPct = selfScore != null ? barPct(selfScore) : null;
+    const nStr = nOthers != null ? `n=${nOthers}` : '';
+    return `
+      <div class="score-row align-items-start">
+        <div class="score-label">
+          ${label}
+          ${subtitle ? `<div style="font-size:.76rem;color:var(--color-muted);margin-top:.15rem;font-style:italic">${subtitle}</div>` : ''}
+        </div>
+        <div class="score-bar-wrap" style="margin-top:.3rem">
+          <div class="score-bar-fill ${col}" style="width:${pct}%"></div>
+          ${showSelf && selfPct != null
+            ? `<div class="self-marker" style="left:${selfPct}%"></div>`
+            : ''}
+        </div>
+        <div class="score-value" style="padding-top:.25rem">${fmt(othersAvg)}</div>
+        ${showSelf ? `<div class="score-n" style="min-width:44px;font-size:.75rem;color:#ff6b35;padding-top:.25rem">${selfScore != null ? 'S:' + fmt(selfScore, 1) : ''}</div>` : ''}
+        ${nStr ? `<div class="score-n" style="padding-top:.25rem">${nStr}</div>` : ''}
+      </div>`;
+  }
+
+  // ─────────────────────────────────────────────
+  // Profile Card
+  // ─────────────────────────────────────────────
+  function renderProfile() {
+    const s = currentStudent;
+    const ec = s.evaluator_counts;
+    const initials = (s.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+
+    // ── Theme scores ──
+    const themes = [
+      { key: 'Leading Organization', short: 'Leading Organization' },
+      { key: 'Leading Others',       short: 'Leading Others' },
+      { key: 'Leading Yourself',     short: 'Leading Yourself' },
+    ];
+    const ta = s.theme_averages || {};
+    const pct = v => v != null ? Math.max(0, Math.min(100, (v - 1) / 4 * 100)).toFixed(1) : 0;
+    const f1  = v => v != null ? v.toFixed(1) : '—';
+
+    const themeRows = themes.map(t => {
+      const d = ta[t.key] || {};
+      const oPct = pct(d.others_avg);
+      const sPct = pct(d.self_avg);
+      return `
+        <div class="pf-theme-row">
+          <div class="pf-theme-lbl">${t.short}</div>
+          <div class="pf-track">
+            <div class="pf-bar" style="width:${oPct}%"></div>
+            ${d.self_avg != null ? `<div class="pf-tick" style="left:${sPct}%"></div>` : ''}
+          </div>
+          <div class="pf-scores">
+            <span class="o">Others: ${f1(d.others_avg)}</span>
+            <span class="s">Self: ${f1(d.self_avg)}</span>
+          </div>
+        </div>`;
+    }).join('');
+
+    // ── Johari quadrant counts (individual median) ──
+    const ccl = s.ccl_competencies || {};
+    const allO = [], allSelf = [];
+    for (const topics of Object.values(ccl))
+      for (const td of Object.values(topics)) {
+        if (td.others_avg != null) allO.push(td.others_avg);
+        if (td.self_avg   != null) allSelf.push(td.self_avg);
+      }
+    const med = arr => { const v = [...arr].sort((a,b)=>a-b); const m = Math.floor(v.length/2); return v.length ? (v.length%2 ? v[m] : (v[m-1]+v[m])/2) : 3.5; };
+    const mX = med(allO), mY = med(allSelf);
+    const counts = { bs:0, hs:0, cs:0, da:0 };
+    for (const topics of Object.values(ccl))
+      for (const td of Object.values(topics)) {
+        if (td.others_avg == null || td.self_avg == null) continue;
+        const x = td.others_avg, y = td.self_avg;
+        if      (x < mX && y >= mY) counts.bs++;
+        else if (x >= mX && y < mY) counts.hs++;
+        else if (x >= mX && y >= mY) counts.cs++;
+        else                          counts.da++;
+      }
+
+    document.getElementById('profileCard').innerHTML = `
+      <div class="pf-top">
+        <div class="pf-avatar">${initials}</div>
+        <div class="pf-identity">
+          <div class="pf-name">${s.name}${s.nickname ? ` <span style="opacity:.7;font-weight:400;font-size:.85em">"${s.nickname}"</span>` : ''}</div>
+          <div class="pf-sub">
+            <span>${s.role || ''}</span>
+            <span style="opacity:.5">·</span>
+            <span>${s.company || ''}</span>
+          </div>
+        </div>
+        <div class="pf-counts">
+          <span class="pf-pill">↑ Boss: ${ec.higher}</span>
+          <span class="pf-pill">= Peer: ${ec.equal}</span>
+          <span class="pf-pill">↓ Sub: ${ec.lower}</span>
+        </div>
+        <div class="pf-johari">
+          <span class="pf-jchip bs">⚠️ ${counts.bs} Blind Spot</span>
+          <span class="pf-jchip hs">⭐ ${counts.hs} Hidden</span>
+          <span class="pf-jchip cs">✅ ${counts.cs} Strength</span>
+          <span class="pf-jchip da">🛠️ ${counts.da} Dev</span>
+        </div>
+      </div>
+      <div class="pf-themes">${themeRows}</div>`;
+  }
+
+  // ─────────────────────────────────────────────
+  // Section 1: Radar Chart
+  // ─────────────────────────────────────────────
+  function renderRadar() {
+    const s = currentStudent;
+    const ta = s.theme_averages;
+    const themes = ['Leading Organization', 'Leading Others', 'Leading Yourself'];
+
+    const othersData = themes.map(t => ta[t]?.others_avg ?? 0);
+    const selfData   = themes.map(t => ta[t]?.self_avg   ?? 0);
+
+    if (radarChartInstance) radarChartInstance.destroy();
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    radarChartInstance = new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: themes.map(t => t.replace(' ', '\n')),
+        datasets: [
+          {
+            label: 'Others Avg',
+            data: othersData,
+            backgroundColor: 'rgba(45,125,210,.18)',
+            borderColor: 'rgba(45,125,210,.9)',
+            borderWidth: 2.5,
+            pointBackgroundColor: 'rgba(45,125,210,.9)',
+            pointRadius: 5,
+          },
+          {
+            label: 'Self',
+            data: selfData,
+            backgroundColor: 'rgba(255,107,53,.12)',
+            borderColor: 'rgba(255,107,53,.9)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(255,107,53,.9)',
+            pointRadius: 4,
+            borderDash: [4, 3],
+          }
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          r: {
+            min: 1,
+            max: 5,
+            ticks: { stepSize: 1, font: { size: 10 } },
+            pointLabels: { font: { size: 11, family: 'Sarabun' }, color: '#1f2d3d' },
+            grid: { color: 'rgba(0,0,0,.08)' },
+          }
+        },
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { size: 11, family: 'Sarabun' }, padding: 16 } },
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.dataset.label}: ${ctx.parsed.r.toFixed(2)}`
+            }
+          }
+        }
+      }
+    });
+
+    // Table on the right — bullet chart rows
+    let html = scaleMiniHeader();
+    for (const t of themes) {
+      const oa = ta[t]?.others_avg;
+      const sa = ta[t]?.self_avg;
+      const shortName = t.replace('Leading ', '');
+      html += `<div class="s13-row">
+        <div class="s13-label"><div class="s13-name">${shortName}</div></div>
+        ${makeBullet2(oa, sa)}
+      </div>`;
+    }
+    document.getElementById('themeAvgTable').innerHTML = html;
+  }
+
+  // ─────────────────────────────────────────────
+  // Section 2: Competency Detail
+  // ─────────────────────────────────────────────
+  // ── Perspective state ──────────────────────────
+  let currentPersp = 'others'; // 'others' | 'higher' | 'peer' | 'lower'
+
+  function setPerspective(p, btn) {
+    currentPersp = p;
+    document.querySelectorAll('.persp-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    updateAllDots();
+    updateHeatmapOpacity();
+  }
+
+  function updateHeatmapOpacity() {
+    const p = currentPersp;
+    document.querySelectorAll('[data-hm-persp]').forEach(el => {
+      const ep = el.dataset.hmPersp;
+      el.style.opacity = (ep === 'self' || ep === p) ? '1' : '0.25';
+    });
+    document.querySelectorAll('[data-hm-header]').forEach(el => {
+      const ep = el.dataset.hmHeader;
+      el.style.opacity = (ep === 'self' || ep === p) ? '1' : '0.25';
+    });
+  }
+
+  function dotPct(v) {
+    if (v == null) return null;
+    return ((v - 1) / 4) * 100;
+  }
+
+  // Color based on comparison: green if others >= self, yellow if others < self
+  function dbColorClass(othersVal, selfVal) {
+    if (othersVal == null) return 'db-grey';
+    if (selfVal == null) return 'db-grey';
+    return othersVal >= selfVal ? 'db-green' : 'db-yellow';
+  }
+
+  function getPerspVal(data, p) {
+    if (p === 'others') return data.others ?? data.others_avg ?? null;
+    if (p === 'higher') return data.higher ?? data.higher_avg ?? null;
+    if (p === 'peer')   return data.peer   ?? data.equal_avg  ?? null;
+    if (p === 'lower')  return data.lower  ?? data.lower_avg  ?? null;
+    return null;
+  }
+
+  // ── Classification logic ──────────────────────────────────────────────────
+  function classifyScore(selfVal, allOthersVal) {
+    if (selfVal == null || allOthersVal == null) return 'default';
+    const gap = selfVal - allOthersVal;
+    if (gap >= 0.5)                                    return 'blind-spot';       // ⚠️ Self overrates self
+    if (gap <= -0.5)                                   return 'hidden-strength';  // ⭐ Others see more
+    if (selfVal > 4.0 && allOthersVal > 4.0)           return 'conf-strength';   // ✅ Everyone agrees: strong
+    if (selfVal < 2.5 && allOthersVal < 2.5)           return 'conf-weakness';   // 🛠️ Everyone agrees: gap
+    return 'default';
+  }
+
+  function buildSelfChip(selfVal, classification) {
+    const sv  = selfVal != null ? selfVal.toFixed(1) : '–';
+    const map = {
+      'blind-spot':      { cls: 'hm-blind-spot',      icon: '⚠️' },
+      'hidden-strength': { cls: 'hm-hidden-strength',  icon: '⭐' },
+      'conf-strength':   { cls: 'hm-conf-strength',    icon: '✅' },
+      'conf-weakness':   { cls: 'hm-conf-weakness',    icon: '🛠️' },
+      'default':         { cls: 'hm-self-default',     icon: '' },
+    };
+    const { cls, icon } = map[classification] || map['default'];
+    return `<div class="hm-chip ${cls}" data-hm-persp="self">${sv}</div>${icon ? `<span class="cf-icon">${icon}</span>` : '<span class="cf-icon"></span>'}`;
+  }
+
+  function gapClass(classification) {
+    if (classification === 'blind-spot')      return 'gap-blind-spot';
+    if (classification === 'hidden-strength') return 'gap-hidden-strength';
+    return 'gap-neutral';
+  }
+
+  function makeDumbbell(barVal, selfVal, dataAttrs = '', allOthersVal = null, higherVal = null, peerVal = null, lowerVal = null) {
+    const cls  = classifyScore(selfVal, allOthersVal);
+    const op   = dotPct(barVal);
+    const sp   = dotPct(selfVal);
+    const barW = op != null ? op : 0;
+    const gc   = gapClass(cls);
+    let gapHtml = '';
+    if (op != null && sp != null) {
+      if      (sp > op) gapHtml = `<div class="bullet-gap ${gc}" style="left:${op}%;width:${sp-op}%"></div>`;
+      else if (op > sp) gapHtml = `<div class="bullet-gap ${gc}" style="left:${sp}%;width:${op-sp}%"></div>`;
+    }
+    const fmt = v => v != null ? v.toFixed(1) : '–';
+    return `
+      <div class="bullet-wrap" ${dataAttrs} data-classification="${cls}">
+        <div class="bullet-track">
+          <div class="bullet-bar" style="width:${barW}%"></div>
+          ${gapHtml}
+          ${sp != null ? `<div class="bullet-self" style="left:${sp}%"></div>` : ''}
+        </div>
+      </div>
+      <div class="hm-cells">
+        <div class="hm-chip hm-plain" data-hm-persp="others">${fmt(allOthersVal)}</div>
+        <div class="hm-chip hm-plain" data-hm-persp="higher">${fmt(higherVal)}</div>
+        <div class="hm-chip hm-plain" data-hm-persp="peer"  >${fmt(peerVal)}</div>
+        <div class="hm-chip hm-plain" data-hm-persp="lower" >${fmt(lowerVal)}</div>
+        ${buildSelfChip(selfVal, cls)}
+      </div>`;
+  }
+
+  function perspLabel(p) {
+    return {others:'Others', higher:'Boss', peer:'Peer', lower:'Sub.'}[p] || 'Others';
+  }
+
+  function applyDumbbellUpdate(el, val, selfVal, p) {
+    const wrap = el.classList.contains('bullet-wrap') ? el : el.querySelector('.bullet-wrap');
+    const cls  = wrap ? (wrap.dataset.classification || 'default') : 'default';
+    const gc   = gapClass(cls);
+    const op   = dotPct(val);
+    const sp   = dotPct(selfVal);
+    const bar  = el.querySelector('.bullet-bar');
+    let   gap  = el.querySelector('.bullet-gap');
+
+    if (bar) bar.style.width = op != null ? op + '%' : '0';
+
+    if (op != null && sp != null && sp !== op) {
+      if (!gap) {
+        gap = document.createElement('div');
+        gap.className = 'bullet-gap';
+        bar.parentNode.insertBefore(gap, bar.nextSibling);
+      }
+      if (sp > op) {
+        gap.className  = `bullet-gap ${gc}`;
+        gap.style.left  = op + '%';
+        gap.style.width = (sp - op) + '%';
+      } else {
+        gap.className  = `bullet-gap ${gc}`;
+        gap.style.left  = sp + '%';
+        gap.style.width = (op - sp) + '%';
+      }
+    } else if (gap) {
+      gap.remove();
+    }
+    // heatmap chips are static — no update needed
+  }
+
+  // ── Simplified 2-chip bullet (for Sec 1 & 3 — no perspective breakdown) ──
+  // Single-bar bullet (no self tick) — for Sec 5 where there is no self score
+  // Uses same column widths as Sec 2 so rows align with the sticky header
+  function makeBullet1(othersVal, barColor) {
+    const op   = dotPct(othersVal);
+    const barW = op != null ? op : 0;
+    const col  = barColor || 'var(--color-secondary)';
+    return `
+      <div class="bullet-wrap">
+        <div class="bullet-track">
+          <div class="bullet-bar" style="width:${barW}%;background:${col}"></div>
+        </div>
+      </div>
+      <div style="flex:0 0 42px;min-width:42px;text-align:center;font-size:.76rem;font-weight:700;color:#374151">${othersVal != null ? othersVal.toFixed(1) : '–'}</div>`;
+  }
+
+  function makeBullet2(othersVal, selfVal) {
+    const cls  = classifyScore(selfVal, othersVal);
+    const op   = dotPct(othersVal);
+    const sp   = dotPct(selfVal);
+    const barW = op != null ? op : 0;
+    const gc   = gapClass(cls);
+    let gapHtml = '';
+    if (op != null && sp != null) {
+      if      (sp > op) gapHtml = `<div class="bullet-gap ${gc}" style="left:${op}%;width:${sp-op}%"></div>`;
+      else if (op > sp) gapHtml = `<div class="bullet-gap ${gc}" style="left:${sp}%;width:${op-sp}%"></div>`;
+    }
+    const fmt = v => v != null ? v.toFixed(1) : '–';
+    return `
+      <div class="bullet-wrap">
+        <div class="bullet-track">
+          <div class="bullet-bar" style="width:${barW}%"></div>
+          ${gapHtml}
+          ${sp != null ? `<div class="bullet-self" style="left:${sp}%"></div>` : ''}
+        </div>
+      </div>
+      <div class="hm-cells2">
+        <div class="hm-chip hm-plain">${fmt(othersVal)}</div>
+        ${buildSelfChip(selfVal, cls)}
+      </div>`;
+  }
+
+  function scaleMiniHeader() {
+    return `<div class="scale-mini">
+      <div class="scale-mini-spacer"></div>
+      <div style="flex:0 0 140px;display:flex;justify-content:space-between;font-size:.62rem;font-weight:600;color:#a0b0c8;padding:0 .1rem">
+        <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+      </div>
+      <div class="hm-cells2">
+        <div class="hm-header">All</div>
+        <div class="hm-header" style="color:#1a3a5c">Self</div>
+        <div style="flex:0 0 18px"></div>
+      </div>
+    </div>`;
+  }
+
+  function updateAllDots() {
+    const p = currentPersp;
+    document.querySelectorAll('[data-topic-persp]').forEach(el => {
+      const d = JSON.parse(el.dataset.topicPersp);
+      const val = getPerspVal(d, p);
+      applyDumbbellUpdate(el, val, d.self, p);
+    });
+    document.querySelectorAll('[data-q-persp]').forEach(el => {
+      const d = JSON.parse(el.dataset.qPersp);
+      const val = getPerspVal(d, p);
+      applyDumbbellUpdate(el, val, d.self, p);
+    });
+  }
+
+  function renderCompetencyDetail() {
+    const s = currentStudent;
+    const ccl = s.ccl_competencies;
+    const themes = ['Leading Organization', 'Leading Others', 'Leading Yourself'];
+    const themeColors = {'Leading Organization': '#1a4b8c', 'Leading Others': '#7b5ea7', 'Leading Yourself': '#2a9d8f'};
+
+    let html = '';
+
+    for (const theme of themes) {
+      const topics = ccl[theme];
+      const tc = themeColors[theme] || '#1a4b8c';
+      html += `<div class="theme-section-title" style="color:${tc};border-color:${tc}22;margin-top:.8rem">${theme}</div>`;
+      html += `<div class="theme-block">`;
+
+      for (const [topicName, td] of Object.entries(topics).sort((a, b) => (b[1].self_avg ?? 0) - (a[1].self_avg ?? 0))) {
+        const persData = JSON.stringify({
+          others: td.others_avg, higher: td.higher_avg, peer: td.equal_avg, lower: td.lower_avg, self: td.self_avg
+        }).replace(/"/g, '&quot;');
+        const initVal = getPerspVal({others:td.others_avg, higher:td.higher_avg, peer:td.equal_avg, lower:td.lower_avg}, currentPersp);
+        html += `
+          <div class="topic-row" onclick="toggleTopic(this)">
+            <span class="topic-name">${topicName}</span>
+            ${makeDumbbell(initVal, td.self_avg, `data-topic-persp="${persData}"`, td.others_avg, td.higher_avg, td.equal_avg, td.lower_avg)}
+            <i class="bi bi-chevron-down topic-chevron"></i>
+          </div>
+          <div class="topic-body">
+            ${renderTopicQuestions(td)}
+          </div>`;
+      }
+
+      html += `</div>`;
+    }
+    document.getElementById('competencyDetail').innerHTML = html;
+    updateHeatmapOpacity();
+  }
+
+  function renderTopicQuestions(td) {
+    if (!td.questions || td.questions.length === 0) return '<div class="no-data">No question data</div>';
+    let html = '';
+    for (const q of td.questions) {
+      const th = q.question_th || '';
+      const en = q.question_en || '';
+      const persData = JSON.stringify({
+        others: q.others_avg, higher: q.higher_avg, peer: q.equal_avg, lower: q.lower_avg, self: q.self
+      }).replace(/"/g, '&quot;');
+      const initVal = getPerspVal({others:q.others_avg, higher:q.higher_avg, peer:q.equal_avg, lower:q.lower_avg}, currentPersp);
+      html += `<div class="q-row" data-q-persp="${persData}">
+        <div class="q-text-th" title="${(th || en).replace(/"/g,'&quot;')}">${th || en}</div>
+        ${makeDumbbell(initVal, q.self, '', q.others_avg, q.higher_avg, q.equal_avg, q.lower_avg)}
+        <span></span>
+      </div>`;
+    }
+    return html;
+  }
+
+  function toggleTopic(row) {
+    const body = row.nextElementSibling;
+    const chevron = row.querySelector('.topic-chevron');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    row.classList.toggle('active', !isOpen);
+    chevron.classList.toggle('open', !isOpen);
+  }
+
+  // ─────────────────────────────────────────────
+  // Section 3: Strengths & Development
+  // ─────────────────────────────────────────────
+  function renderStrengthsDev() {
+    const s = currentStudent;
+    const ccl = s.ccl_competencies || {};
+
+    const themeColors = {
+      'Leading Organization': '#1a4b8c',
+      'Leading Others':       '#7b5ea7',
+      'Leading Yourself':     '#2a9d8f',
+    };
+
+    const QUADS = {
+      'conf-strength':   { icon: '✅', label: 'Confirmed Strength', color: '#1e40af', bg: 'rgba(219,234,254,.3)',  border: '#93c5fd', desc: 'Both you and others agree this is a strength.' },
+      'blind-spot':      { icon: '⚠️', label: 'Blind Spot',         color: '#c2410c', bg: 'rgba(255,237,213,.4)',  border: '#fdba74', desc: 'You rate yourself higher than others do.' },
+      'hidden-strength': { icon: '⭐', label: 'Hidden Strength',    color: '#0d9488', bg: 'rgba(204,251,241,.35)', border: '#5eead4', desc: 'Others rate you higher than you rate yourself.' },
+      'dev-area':        { icon: '🛠️', label: 'Development Area',   color: '#475569', bg: 'rgba(241,245,249,.7)',  border: '#cbd5e1', desc: 'Both you and others see room for growth.' },
+    };
+
+    // Dynamic thresholds — updated before each view render
+    let thX = 3.5, thY = 3.5;
+
+    function calcMedian(vals) {
+      const v = vals.filter(x => x != null).sort((a, b) => a - b);
+      if (!v.length) return 3.5;
+      const m = Math.floor(v.length / 2);
+      return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2;
+    }
+
+    // Inject shell HTML once
+    document.getElementById('strengthsDevContent').innerHTML = `
+      <div id="johariToolbar" style="min-height:32px;margin-bottom:.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap"></div>
+      <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap">
+        <div style="flex:0 0 420px;max-width:100%">
+          <canvas id="johariChart" style="width:100%;aspect-ratio:1"></canvas>
+        </div>
+        <div style="flex:1;min-width:260px" id="johariLegend"></div>
+      </div>`;
+
+    // ── Shared: quadrant background plugin (reads thX/thY from closure) ──
+    const quadPlugin = {
+      id: 'quadPlugin',
+      beforeDraw(chart) {
+        const { ctx, chartArea: { left, right, top, bottom }, scales } = chart;
+        const mx = scales.x.getPixelForValue(thX);
+        const my = scales.y.getPixelForValue(thY);
+        ctx.save();
+        [[left,top,mx-left,my-top,'rgba(255,237,213,.28)'],[mx,top,right-mx,my-top,'rgba(219,234,254,.28)'],
+         [left,my,mx-left,bottom-my,'rgba(241,245,249,.5)'],[mx,my,right-mx,bottom-my,'rgba(204,251,241,.25)']
+        ].forEach(([x,y,w,h,c]) => { ctx.fillStyle=c; ctx.fillRect(x,y,w,h); });
+        ctx.strokeStyle='rgba(100,116,139,.45)'; ctx.lineWidth=1.5; ctx.setLineDash([6,4]);
+        ctx.beginPath(); ctx.moveTo(mx,top); ctx.lineTo(mx,bottom); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(left,my); ctx.lineTo(right,my); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.font='600 10px Sarabun,sans-serif';
+        [
+          [mx-6,top+7,   'right','top',   '#c2410c','⚠️ Blind Spot'],
+          [mx+6,top+7,   'left', 'top',   '#1e40af','✅ Confirmed Strength'],
+          [mx-6,bottom-7,'right','bottom','#475569', '🛠️ Dev Area'],
+          [mx+6,bottom-7,'left', 'bottom','#0d9488', '⭐ Hidden Strength'],
+        ].forEach(([x,y,ta,tb,col,txt]) => {
+          ctx.fillStyle=col; ctx.textAlign=ta; ctx.textBaseline=tb; ctx.fillText(txt,x,y);
+        });
+        ctx.restore();
+      }
+    };
+
+    // ── Classify using current thresholds ──
+    function classify(x, y) {
+      return x >= thX && y >= thY ? 'conf-strength'
+           : x <  thX && y >= thY ? 'blind-spot'
+           : x >= thX && y <  thY ? 'hidden-strength'
+           : 'dev-area';
+    }
+
+    // ── Build + mount chart ──
+    function buildChart(ptsByQ, onClickFn) {
+      const datasets = Object.entries(QUADS).map(([key, q]) => ({
+        label: `${q.icon} ${q.label}`,
+        data: ptsByQ[key],
+        backgroundColor: q.color + 'cc',
+        borderColor: q.color,
+        borderWidth: 1.5,
+        pointRadius: 7,
+        pointHoverRadius: 10,
+      }));
+
+      // Auto-zoom: compute axis range from data + padding around median
+      const allPts = Object.values(ptsByQ).flat();
+      const pad = 0.5;
+      // Ensure the crosshair (thX/thY) has equal space on both sides → center it
+      const halfRangeX = Math.max(
+        pad,
+        allPts.length ? Math.max(thX - Math.min(...allPts.map(p=>p.x)), Math.max(...allPts.map(p=>p.x)) - thX) + pad : pad
+      );
+      const halfRangeY = Math.max(
+        pad,
+        allPts.length ? Math.max(thY - Math.min(...allPts.map(p=>p.y)), Math.max(...allPts.map(p=>p.y)) - thY) + pad : pad
+      );
+      const xMin = Math.max(1, +(thX - halfRangeX).toFixed(2));
+      const xMax = Math.min(5, +(thX + halfRangeX).toFixed(2));
+      const yMin = Math.max(1, +(thY - halfRangeY).toFixed(2));
+      const yMax = Math.min(5, +(thY + halfRangeY).toFixed(2));
+
+      if (johariChartInstance) johariChartInstance.destroy();
+      johariChartInstance = new Chart(
+        document.getElementById('johariChart').getContext('2d'), {
+          type: 'scatter',
+          data: { datasets },
+          options: {
+            responsive: true,
+            aspectRatio: 1,
+            onClick: onClickFn || null,
+            onHover: (e, els) => { e.native.target.style.cursor = els.length ? 'pointer' : 'default'; },
+            scales: {
+              x: { min: xMin, max: xMax, title:{ display:true, text:`Others Score →  (median: ${thX.toFixed(2)})`, font:{size:11,family:'Sarabun'} }, ticks:{font:{size:10}}, grid:{color:'rgba(0,0,0,.05)'} },
+              y: { min: yMin, max: yMax, title:{ display:true, text:`↑ Self Score  (median: ${thY.toFixed(2)})`,   font:{size:11,family:'Sarabun'} }, ticks:{font:{size:10}}, grid:{color:'rgba(0,0,0,.05)'} },
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: {
+                title: () => '',
+                label: c => `${c.raw.label}  (Others: ${c.parsed.x.toFixed(2)}, Self: ${c.parsed.y.toFixed(2)})`,
+              }},
+            },
+          },
+          plugins: [quadPlugin],
+        }
+      );
+    }
+
+    // ── Build legend panel (2×2 grid mirroring chart) ──
+    function buildLegend(ptsByQ, labelKey, onItemClick) {
+      const clickable = typeof onItemClick === 'function';
+      const order = ['blind-spot', 'conf-strength', 'dev-area', 'hidden-strength'];
+      const cells = order.map(key => {
+        const q = QUADS[key];
+        const items = ptsByQ[key];
+        const chips = items.length
+          ? items.map((p, i) => `<span
+              data-quad="${key}" data-idx="${i}"
+              style="display:inline-flex;align-items:center;gap:.25rem;background:rgba(0,0,0,.06);border-radius:4px;padding:.15rem .4rem;font-size:.72rem;color:#374151;margin:.15rem .15rem 0 0;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;${clickable ? 'cursor:pointer;' : ''}"
+              title="${p[labelKey]}">
+              <span style="width:6px;height:6px;border-radius:50%;background:${p.color};flex-shrink:0"></span>${p[labelKey]}${clickable ? ' <span style="opacity:.45;font-size:.65rem">↗</span>' : ''}
+            </span>`).join('')
+          : `<span style="font-size:.71rem;color:#94a3b8;font-style:italic">—</span>`;
+        return `<div style="border:1px solid ${q.border};border-radius:8px;padding:.5rem .65rem;background:${q.bg};min-height:80px">
+          <div style="font-size:.75rem;font-weight:700;color:${q.color};margin-bottom:.3rem">
+            ${q.icon} ${q.label} <span style="font-weight:500;font-size:.68rem;color:#94a3b8">(${items.length})</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap">${chips}</div>
+        </div>`;
+      });
+
+      const el = document.getElementById('johariLegend');
+      el.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">${cells.join('')}</div>`;
+
+      if (clickable) {
+        el.querySelectorAll('[data-quad]').forEach(chip => {
+          chip.addEventListener('mouseenter', () => chip.style.background = 'rgba(0,0,0,.12)');
+          chip.addEventListener('mouseleave', () => chip.style.background = 'rgba(0,0,0,.06)');
+          chip.addEventListener('click', () => {
+            const p = ptsByQ[chip.dataset.quad][+chip.dataset.idx];
+            onItemClick(p);
+          });
+        });
+      }
+    }
+
+    // ── TOPIC VIEW ──
+    function drawTopicView() {
+      // Collect all valid topic scores to compute individual medians
+      const allOthers = [], allSelf = [];
+      for (const topics of Object.values(ccl)) {
+        for (const td of Object.values(topics)) {
+          if (td.others_avg != null) allOthers.push(td.others_avg);
+          if (td.self_avg   != null) allSelf.push(td.self_avg);
+        }
+      }
+      thX = calcMedian(allOthers);
+      thY = calcMedian(allSelf);
+
+      document.getElementById('johariToolbar').innerHTML =
+        `<span style="font-size:.8rem;color:var(--color-muted)">Click a dot to drill into its sub-questions</span>
+         <span style="font-size:.75rem;color:#94a3b8;margin-left:auto">Dividing line = your personal median</span>`;
+
+      const ptsByQ = { 'conf-strength':[], 'blind-spot':[], 'hidden-strength':[], 'dev-area':[] };
+      for (const [theme, topics] of Object.entries(ccl)) {
+        for (const [name, td] of Object.entries(topics)) {
+          if (td.others_avg == null || td.self_avg == null) continue;
+          ptsByQ[classify(td.others_avg, td.self_avg)].push(
+            { x: td.others_avg, y: td.self_avg, label: name, theme, color: themeColors[theme] || '#666' }
+          );
+        }
+      }
+
+      const drillDown = p => drawQuestionView(p.label, p.theme);
+      buildChart(ptsByQ, function(event, elements, chart) {
+        if (!elements.length) return;
+        drillDown(chart.data.datasets[elements[0].datasetIndex].data[elements[0].index]);
+      });
+      buildLegend(ptsByQ, 'label', drillDown);
+    }
+
+    // ── QUESTION VIEW (drill-down) ──
+    function drawQuestionView(topicName, theme) {
+      const themeColor = themeColors[theme] || '#1a4b8c';
+      const td = ccl[theme]?.[topicName];
+      const questions = (td?.questions || []).filter(q => q.others_avg != null && q.self != null);
+
+      // Compute medians from this topic's questions
+      thX = calcMedian(questions.map(q => q.others_avg));
+      thY = calcMedian(questions.map(q => q.self));
+
+      const toolbar = document.getElementById('johariToolbar');
+      toolbar.innerHTML = `
+        <button id="johariBack" style="display:inline-flex;align-items:center;gap:.35rem;padding:.28rem .75rem;font-size:.8rem;font-weight:600;border:1px solid var(--color-border);border-radius:6px;background:#fff;color:var(--color-text);cursor:pointer">
+          ← All Topics
+        </button>
+        <span style="font-size:.85rem;font-weight:700;color:${themeColor}">${topicName}</span>
+        <span style="font-size:.76rem;color:var(--color-muted)">${theme}</span>`;
+      document.getElementById('johariBack').addEventListener('click', drawTopicView);
+
+      const ptsByQ = { 'conf-strength':[], 'blind-spot':[], 'hidden-strength':[], 'dev-area':[] };
+      for (const q of questions) {
+        const lbl = (q.question_th || q.question_en || `Q${q.qid}`);
+        ptsByQ[classify(q.others_avg, q.self)].push(
+          { x: q.others_avg, y: q.self, label: lbl, color: themeColor }
+        );
+      }
+
+      buildChart(ptsByQ, null);
+      buildLegend(ptsByQ, 'label', null);
+    }
+
+    drawTopicView();
+  }
+
+  // ─────────────────────────────────────────────
+  // Section 4: Edmondson Team Health
+  // ─────────────────────────────────────────────
+  function renderEdmondson() {
+    const s = currentStudent;
+    const dims = s.edmondson || [];
+
+    if (!dims.length) {
+      document.getElementById('edmondsonContent').innerHTML = '<div class="no-data"><i class="bi bi-info-circle"></i>No Edmondson data available</div>';
+      return;
+    }
+
+    const dimColors = {
+      'Psychological Safety': '#7b5ea7',
+      'Dependability': '#2d7dd2',
+      'Clarity': '#2a9d8f',
+      'Meaning': '#f0a500',
+      'Impact': '#2e8b57',
+    };
+
+    // Sticky header — identical to Sec 2
+    const sec5Sticky = `
+      <div class="sec2-sticky">
+        <div class="persp-toggle" style="margin-bottom:.4rem">
+          <button class="persp-btn pb-all active" onclick="setPerspective('others',this)">◉ All Others</button>
+          <button class="persp-btn pb-higher" onclick="setPerspective('higher',this)">↑ Boss</button>
+          <button class="persp-btn pb-peer"   onclick="setPerspective('peer',this)">= Peer</button>
+          <button class="persp-btn pb-lower"  onclick="setPerspective('lower',this)">↓ Sub.</button>
+        </div>
+        <div class="bullet-scale-header">
+          <div class="scale-name-spacer"></div>
+          <div class="scale-labels"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+          <div class="hm-cells" style="gap:3px">
+            <div class="hm-header" data-hm-header="others">All</div>
+            <div class="hm-header" data-hm-header="higher">Boss</div>
+            <div class="hm-header" data-hm-header="peer">Peer</div>
+            <div class="hm-header" data-hm-header="lower">Sub</div>
+            <div class="hm-header" data-hm-header="self" style="color:#1a3a5c">Self</div>
+            <div style="flex:0 0 18px"></div>
+          </div>
+          <div style="flex:0 0 14px"></div>
+        </div>
+      </div>`;
+
+    let html = sec5Sticky;
+
+    for (const d of dims) {
+      const col = dimColors[d.dimension] || '#666';
+      const persData = JSON.stringify({
+        others: d.others_avg, higher: d.higher_avg, peer: d.equal_avg, lower: d.lower_avg, self: d.self_avg
+      }).replace(/"/g, '&quot;');
+      const initVal = getPerspVal({others: d.others_avg, higher: d.higher_avg, peer: d.equal_avg, lower: d.lower_avg}, currentPersp);
+
+      html += `<div class="theme-block" style="margin-bottom:1rem">
+        <div class="topic-row" onclick="toggleTopic(this)" style="border-left:4px solid ${col}">
+          <span class="topic-name" style="color:${col}">${d.dimension}</span>
+          ${makeDumbbell(initVal, d.self_avg, `data-topic-persp="${persData}"`, d.others_avg, d.higher_avg, d.equal_avg, d.lower_avg)}
+          <i class="bi bi-chevron-down topic-chevron"></i>
+        </div>
+        <div class="topic-body">`;
+
+      for (const q of (d.questions || [])) {
+        const lbl = q.question_th || q.question_en || `Q${q.qid}`;
+        const qPersData = JSON.stringify({
+          others: q.others_avg, higher: q.higher_avg, peer: q.equal_avg, lower: q.lower_avg, self: q.self
+        }).replace(/"/g, '&quot;');
+        const qInitVal = getPerspVal({others: q.others_avg, higher: q.higher_avg, peer: q.equal_avg, lower: q.lower_avg}, currentPersp);
+        html += `<div class="q-row" data-q-persp="${qPersData}">
+          <div class="q-text-th" title="${lbl.replace(/"/g,'&quot;')}">${lbl}</div>
+          ${makeDumbbell(qInitVal, q.self, '', q.others_avg, q.higher_avg, q.equal_avg, q.lower_avg)}
+          <span></span>
+        </div>`;
+      }
+
+      html += `</div></div>`;
+    }
+
+    document.getElementById('edmondsonContent').innerHTML = html;
+  }
+
+  // ─────────────────────────────────────────────
+  // Section 5: Open-ended Feedback
+  // ─────────────────────────────────────────────
+  function renderOpenEnded() {
+    const s = currentStudent;
+    const oe = s.open_ended || [];
+
+    if (!oe.length) {
+      document.getElementById('openEndedContent').innerHTML = '<div class="no-data"><i class="bi bi-chat-dots"></i>No open-ended responses available</div>';
+      return;
+    }
+
+    let html = '';
+    for (const q of oe) {
+      const boss = q.responses.higher || [];
+      const peer = q.responses.equal  || [];
+      const sub  = q.responses.lower  || [];
+
+      const colHtml = (items, cls) => items.length
+        ? items.map(t => `<div class="oe-item ${cls}">${escapeHtml(t)}</div>`).join('')
+        : `<span class="oe-empty">No responses</span>`;
+
+      html += `
+        <div class="oe-block">
+          <div class="oe-block-header">
+            <div style="font-size:.92rem;font-weight:700;color:var(--color-primary)">Q${q.qid}: ${q.label_en}</div>
+            <div style="font-size:.8rem;color:var(--color-muted);margin-top:.1rem">${q.label_th}</div>
+          </div>
+          <div class="oe-grid">
+            <div class="oe-col">
+              <div class="oe-col-head boss">↑ Boss (${boss.length})</div>
+              ${colHtml(boss, 'boss')}
+            </div>
+            <div class="oe-col">
+              <div class="oe-col-head peer">= Peer (${peer.length})</div>
+              ${colHtml(peer, 'peer')}
+            </div>
+            <div class="oe-col">
+              <div class="oe-col-head sub">↓ Sub (${sub.length})</div>
+              ${colHtml(sub, 'sub')}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    document.getElementById('openEndedContent').innerHTML = html;
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.appendChild(document.createTextNode(text));
+    return div.innerHTML;
+  }
+
+  // ─────────────────────────────────────────────
+  // Section nav scroll
+  // ─────────────────────────────────────────────
+  function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 70;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+    // Update active button
+    document.querySelectorAll('.section-nav-tabs button').forEach((btn, i) => {
+      btn.classList.toggle('active', btn.getAttribute('onclick').includes(id));
+    });
+  }
+
+  // Highlight active section nav on scroll
+  window.addEventListener('scroll', () => {
+    const ids = ['sec2','sec3','sec5','sec6'];
+    let active = ids[0];
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top <= 80) active = id;
+    }
+    document.querySelectorAll('.section-nav-tabs button').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('onclick').includes(active));
+    });
+  });
+
+  // ─────────────────────────────────────────────
+  // Boot
+  // ─────────────────────────────────────────────
+  init();
+  </script>
+</body>
+</html>
