@@ -88,6 +88,101 @@
       box-shadow: 0 1px 4px rgba(0,0,0,.15);
     }
 
+    /* ── Login screen ── */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-bg);
+      padding: 2rem;
+    }
+    #loginBox {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.1);
+      padding: 3rem 2.5rem 2.5rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+    #loginBox .login-logo {
+      background: var(--color-primary);
+      color: #fff;
+      border-radius: 12px;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin: 0 auto 1.25rem;
+    }
+    #loginBox h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: .35rem;
+    }
+    #loginBox p.subtitle {
+      font-size: .9rem;
+      color: var(--color-muted);
+      margin-bottom: 1.75rem;
+    }
+    #loginBox input[type=text],
+    #loginBox input[type=password] {
+      width: 100%;
+      padding: .85rem 1.1rem;
+      border: 1.5px solid var(--color-border);
+      border-radius: 10px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      margin-bottom: .85rem;
+      background: #f8fafd;
+      color: var(--color-text);
+    }
+    #loginBox input[type=text]:focus,
+    #loginBox input[type=password]:focus {
+      border-color: var(--color-secondary);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(45,125,210,.12);
+    }
+    #loginBox input::placeholder { color: #aab4c0; }
+    #loginBox button.login-btn {
+      width: 100%;
+      background: var(--color-primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: .75rem;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    #loginBox button.login-btn:hover { background: var(--color-secondary); }
+    #loginError {
+      color: var(--color-danger);
+      font-size: .85rem;
+      margin-top: .75rem;
+      display: none;
+    }
+    .top-navbar .logout-btn {
+      background: rgba(255,255,255,.15);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 6px;
+      padding: .3rem .75rem;
+      font-family: 'Sarabun', sans-serif;
+      font-size: .82rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .top-navbar .logout-btn:hover { background: rgba(255,255,255,.25); }
+
     /* ── Main layout ── */
     .main-content {
       max-width: 1180px;
@@ -321,7 +416,7 @@
     }
     .topic-row:hover { background: #f4f7fc; }
     .topic-row.active { background: #eef3fb; }
-    .topic-name { font-size: .92rem; font-weight: 700; flex: 1; min-width: 0; color: var(--color-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .topic-name { font-size: .92rem; font-weight: 700; flex: 1; min-width: 0; color: var(--color-text); }
     .q-text-th  { flex: 1; min-width: 0; font-size: .8rem; color: var(--color-muted); font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .topic-chevron { transition: transform .2s; color: var(--color-muted); font-size: .8rem; flex: 0 0 14px; text-align: center; }
     .topic-chevron.open { transform: rotate(180deg); }
@@ -435,7 +530,7 @@
     .ts-label { font-size: .6rem; color: var(--color-muted); font-weight: 500; }
     .ts-val { font-weight: 700; font-size: .82rem; }
     .ts-val.db-green  { color: var(--color-high); }
-    .ts-val.db-yellow { color: #c97700; }
+    .ts-val.db-yellow { color: var(--color-low); }
     .ts-val.db-grey   { color: #888; }
     .ts-val.db-dark   { color: #1a3a5c; font-weight: 700; }
 
@@ -728,6 +823,8 @@
       .top-navbar { padding: 0 .75rem; }
       .top-navbar .brand { font-size: .82rem; }
       .top-navbar select#studentSelect { max-width: 180px; font-size: .8rem; }
+      #loginScreen { padding: 1.5rem 1rem; }
+      #loginBox { padding: 2rem 1.25rem; }
 
       /* Profile card */
       .profile-card { padding: .8rem 1rem .9rem; border-radius: 10px 10px 0 0; }
@@ -854,6 +951,19 @@
 </head>
 
 <body>
+  <!-- Login Screen -->
+  <div id="loginScreen" style="display:none">
+    <div id="loginBox">
+      <div class="login-logo"><i class="bi bi-person-circle"></i></div>
+      <h2>360° Leadership Report</h2>
+      <p class="subtitle">กรุณากรอกอีเมลที่ลงทะเบียนไว้เพื่อดูผลการประเมิน</p>
+      <input type="text" id="loginUser" placeholder="อีเมลของคุณ" autocomplete="username" />
+      <input type="password" id="loginPass" placeholder="รหัสผ่าน" autocomplete="current-password" style="display:none" />
+      <button class="login-btn" onclick="doLogin()">ดูผลการประเมิน</button>
+      <div id="loginError">ไม่พบข้อมูลในระบบ กรุณาตรวจสอบอีกครั้ง</div>
+    </div>
+  </div>
+
   <!-- Loading -->
   <div id="loadingOverlay">
     <div class="spinner-border text-primary" role="status"></div>
@@ -866,7 +976,9 @@
       <span class="badge-ccl">CCL</span>
       360-Degree Leadership Assessment
     </div>
-    <select id="studentSelect" title="Select student"></select>
+    <span id="navUserName" style="font-size:.9rem;opacity:.85"></span>
+    <select id="studentSelect" title="Select student" style="display:none"></select>
+    <button class="logout-btn" onclick="doLogout()">ออกจากระบบ</button>
   </nav>
 
   <!-- Main content -->
@@ -898,7 +1010,7 @@
         <span><span style="display:inline-block;width:26px;height:8px;border-radius:4px;background:var(--color-secondary);vertical-align:middle;margin-right:4px"></span>Others</span>
         <span><span style="display:inline-block;width:3px;height:14px;border-radius:2px;background:#1a3a5c;vertical-align:middle;margin-right:4px"></span>Self</span>
         <span style="color:var(--color-high)"><strong>Green Self</strong> = others rated you higher</span>
-        <span style="color:#c97700"><strong>Yellow Self</strong> = you rated yourself higher</span>
+        <span style="color:var(--color-low)"><strong>Red Self</strong> = you rated yourself higher</span>
       </div>
       <!-- Sticky control bar: perspective toggle + scale header -->
       <div class="sec2-sticky">
@@ -967,25 +1079,77 @@
 
   <script>
   // ─────────────────────────────────────────────
+  // Topic Descriptions
+  // ─────────────────────────────────────────────
+  const TOPIC_DESCRIPTIONS = {
+    // ── CCL Benchmarks for Executives (official descriptions from CCL report) ──
+    'Strategic Planning':              { en: 'Develops long-term objectives and strategies; translates vision into realistic business strategies.', th: 'พัฒนาวัตถุประสงค์และกลยุทธ์ระยะยาว แปลวิสัยทัศน์ไปสู่กลยุทธ์ทางธุรกิจที่เป็นรูปธรรม' },
+    'Results Orientation':             { en: 'Aligns resources to accomplish key objectives; assigns clear accountability for important objectives.', th: 'จัดสรรทรัพยากรให้บรรลุวัตถุประสงค์หลัก กำหนดความรับผิดชอบที่ชัดเจนสำหรับเป้าหมายสำคัญ' },
+    'Sound Judgment':                  { en: 'Makes timely decisions; readily understands complex issues; develops solutions that effectively address problems.', th: 'ตัดสินใจได้ทันท่วงที เข้าใจปัญหาที่ซับซ้อนได้อย่างรวดเร็ว และพัฒนาแนวทางแก้ไขที่มีประสิทธิผล' },
+    'Sound judgment':                  { en: 'Makes timely decisions; readily understands complex issues; develops solutions that effectively address problems.', th: 'ตัดสินใจได้ทันท่วงที เข้าใจปัญหาที่ซับซ้อนได้อย่างรวดเร็ว และพัฒนาแนวทางแก้ไขที่มีประสิทธิผล' },
+    'Inspiring Commitment':            { en: 'Motivates others to perform at their best.', th: 'จูงใจผู้อื่นให้ทำงานได้อย่างเต็มศักยภาพ' },
+    'Inspiring commitment':            { en: 'Motivates others to perform at their best.', th: 'จูงใจผู้อื่นให้ทำงานได้อย่างเต็มศักยภาพ' },
+    'Forging Synergy':                 { en: 'Maintains smooth, effective working relationships; promotes effective teamwork.', th: 'รักษาความสัมพันธ์ในการทำงานที่ราบรื่นและมีประสิทธิภาพ ส่งเสริมการทำงานเป็นทีม' },
+    'Developing and Empowering':       { en: 'Offers constructive feedback and encouragement; delegates work and encourages individual initiative.', th: 'ให้ฟีดแบ็กเชิงสร้างสรรค์และกำลังใจ มอบหมายงานและส่งเสริมความคิดริเริ่มของแต่ละคน' },
+    'Communicating Effectively':       { en: 'Expresses ideas clearly and concisely; disseminates information about decisions, plans, and activities.', th: 'แสดงความคิดได้ชัดเจนกระชับ และเผยแพร่ข้อมูลเกี่ยวกับการตัดสินใจ แผนงาน และกิจกรรม' },
+    'Interpersonal Savvy':             { en: 'Understands own impact on situations and people; accurately senses when to give and take when negotiating.', th: 'เข้าใจผลกระทบของตนต่อสถานการณ์และผู้คน รู้จักให้และรับในการเจรจาอย่างเหมาะสม' },
+    'Courage':                         { en: 'Acts decisively to tackle difficult problems; perseveres in the face of problems; takes the lead on unpopular though necessary actions.', th: 'ลงมือแก้ปัญหายากได้อย่างเด็ดขาด อดทนต่ออุปสรรค และนำในสิ่งที่ไม่เป็นที่นิยมแต่จำเป็น' },
+    'Executive Image':                 { en: 'Communicates confidence and steadiness during difficult times; adapts readily to new situations.', th: 'แสดงความมั่นใจและมั่นคงในยามวิกฤต ปรับตัวได้ดีกับสถานการณ์ใหม่' },
+    'Learning from Experience':        { en: 'Reflects on and learns from experience; understands own weaknesses and how to compensate for them.', th: 'ทบทวนและเรียนรู้จากประสบการณ์ เข้าใจจุดอ่อนของตนเองและวิธีชดเชย' },
+    'Credibility':                     { en: 'Acts in accordance with stated values; follows through on promises; uses ethical considerations to guide decisions and actions.', th: 'ปฏิบัติตามค่านิยมที่ประกาศไว้ รักษาสัญญา และใช้จริยธรรมเป็นแนวทางในการตัดสินใจ' },
+    // ── CCL Benchmarks for Managers (official descriptions from CCL report) ──
+    'Strategic Perspective':           { en: 'Understands the viewpoint of higher management and effectively analyzes complex problems.', th: 'เข้าใจมุมมองของผู้บริหารระดับสูงและวิเคราะห์ปัญหาที่ซับซ้อนได้อย่างมีประสิทธิภาพ' },
+    'Being a Quick Study':             { en: 'Quickly masters new technical and business knowledge.', th: 'เรียนรู้ความรู้ด้านเทคนิคและธุรกิจใหม่ได้อย่างรวดเร็ว' },
+    'Decisiveness':                    { en: 'Prefers quick and approximate actions in many management situations.', th: 'ชอบลงมือทำอย่างรวดเร็วในสถานการณ์การจัดการต่างๆ โดยไม่ลังเล' },
+    'Change Management':               { en: 'Uses effective strategies to facilitate organizational change initiatives and overcome resistance to change.', th: 'ใช้กลยุทธ์ที่มีประสิทธิภาพในการขับเคลื่อนการเปลี่ยนแปลงองค์กรและเอาชนะความต้านทาน' },
+    'Confronting Problem Employees':   { en: 'Acts decisively and with fairness when dealing with problem employees.', th: 'ลงมือแก้ปัญหาพนักงานอย่างเด็ดขาดและเป็นธรรม' },
+    'Participative Management':        { en: 'Involves others, listens, and builds commitment.', th: 'เปิดรับความคิดเห็น รับฟัง และสร้างความมุ่งมั่นร่วมกัน' },
+    'Building Collaborative Relationships': { en: 'Builds productive working relationships with coworkers and external parties.', th: 'สร้างความสัมพันธ์ในการทำงานที่มีประสิทธิภาพกับเพื่อนร่วมงานและบุคคลภายนอก' },
+    'Compassion and Sensitivity':      { en: 'Shows genuine interest in others and sensitivity to employees\' needs.', th: 'แสดงความสนใจอย่างแท้จริงและเอาใจใส่ต่อความต้องการของพนักงาน' },
+    'Putting People at Ease':          { en: 'Displays warmth and a good sense of humor.', th: 'แสดงความอบอุ่นและอารมณ์ขันที่ดี ทำให้ผู้คนรู้สึกสบายใจ' },
+    'Taking Initiative':               { en: 'Takes charge and capitalizes on opportunities.', th: 'รับผิดชอบและคว้าโอกาสที่เกิดขึ้น' },
+    'Composure':                       { en: 'Demonstrates self-control in difficult situations.', th: 'แสดงความสามารถในการควบคุมตนเองในสถานการณ์ที่ยากลำบาก' },
+    'Balance Between Personal and Work Life': { en: 'Balances work priorities with personal life.', th: 'สร้างสมดุลระหว่างความสำคัญของงานกับชีวิตส่วนตัว' },
+    'Self-awareness':                  { en: 'Has an accurate picture of strengths and weaknesses and is willing to improve.', th: 'มีภาพที่ถูกต้องเกี่ยวกับจุดแข็งและจุดอ่อน และพร้อมที่จะพัฒนาตนเอง' },
+    'Career Management':               { en: 'Uses effective career management tactics, including mentoring, professional relationships, and feedback channels.', th: 'ใช้กลยุทธ์การบริหารอาชีพที่มีประสิทธิภาพ รวมถึงการเป็นพี่เลี้ยง ความสัมพันธ์วิชาชีพ และช่องทางรับฟีดแบ็ก' },
+    'Leading Employees':               { en: 'Attracts, motivates, and develops employees.', th: 'ดึงดูด จูงใจ และพัฒนาพนักงาน' },
+    'Respect for Differences':         { en: 'Values people of different backgrounds, cultures, or demographics.', th: 'ให้คุณค่าแก่ผู้คนที่มีภูมิหลัง วัฒนธรรม หรือลักษณะที่แตกต่างกัน' },
+    // ── Google re:Work — Team Effectiveness ──
+    'Psychological Safety':            { en: 'Team members feel safe to take risks and be vulnerable in front of each other.', th: 'บรรยากาศทีมที่สมาชิกรู้สึกปลอดภัยที่จะเสี่ยง แสดงความคิดเห็น และเป็นตัวเองได้โดยไม่ต้องกลัว' },
+    'Dependability':                   { en: 'Team members get things done on time and meet the high bar for excellence.', th: 'สมาชิกในทีมทำงานเสร็จตรงเวลาและรักษามาตรฐานความเป็นเลิศ' },
+    'Clarity':                         { en: 'Team members have clear roles, plans, and goals.', th: 'สมาชิกในทีมมีความชัดเจนในบทบาท แผนงาน และเป้าหมาย' },
+    'Meaning':                         { en: 'Work is personally important to team members.', th: 'งานมีความหมายและสำคัญต่อสมาชิกในทีมเป็นการส่วนตัว' },
+    'Impact':                          { en: 'Team members think their work matters and creates change.', th: 'สมาชิกในทีมเชื่อว่างานของตนมีความสำคัญและสร้างการเปลี่ยนแปลง' },
+  };
+
+  // ─────────────────────────────────────────────
   // State
   // ─────────────────────────────────────────────
   let reportData = null;
   let currentStudent = null;
   let johariChartInstance = null;
   let perspectiveChartInstance = null;
+  let isAdmin = false;
 
   // ─────────────────────────────────────────────
-  // Load data
+  // Load data + Login
   // ─────────────────────────────────────────────
   async function init() {
     try {
       const resp = await fetch('report_data.json');
       if (!resp.ok) throw new Error('Cannot load report_data.json');
       reportData = await resp.json();
-      populateStudentDropdown();
-      selectStudent(0);
       document.getElementById('loadingOverlay').style.display = 'none';
-      document.getElementById('mainContent').style.display = '';
+      if (restoreSession()) return;
+      document.getElementById('loginScreen').style.display = 'flex';
+      // Show password field when typing admin username
+      const userEl = document.getElementById('loginUser');
+      const passEl = document.getElementById('loginPass');
+      userEl.addEventListener('input', () => {
+        passEl.style.display = userEl.value.trim().toLowerCase() === 'nitsir' ? '' : 'none';
+      });
+      userEl.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+      passEl.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
     } catch (err) {
       document.getElementById('loadingOverlay').innerHTML =
         `<i class="bi bi-exclamation-triangle" style="font-size:2.5rem;color:#c0392b"></i>
@@ -994,26 +1158,224 @@
     }
   }
 
+  function doLogin() {
+    const userVal = document.getElementById('loginUser').value.trim();
+    const passVal = document.getElementById('loginPass').value;
+    const errEl   = document.getElementById('loginError');
+    errEl.style.display = 'none';
+
+    // Admin login
+    if (userVal.toLowerCase() === 'nitsir') {
+      if (passVal !== '254900') { errEl.style.display = 'block'; return; }
+      localStorage.setItem('360_session', JSON.stringify({ type: 'admin' }));
+      isAdmin = true;
+      enterApp();
+      populateStudentDropdown();
+      selectStudent('agg');
+      return;
+    }
+
+    // Student login by email
+    const email = userVal.toLowerCase();
+    const idx = reportData.students.findIndex(s => (s.email || '').toLowerCase() === email);
+    if (idx === -1) { errEl.style.display = 'block'; return; }
+    localStorage.setItem('360_session', JSON.stringify({ type: 'student', email }));
+    isAdmin = false;
+    enterApp();
+    document.getElementById('navUserName').textContent = reportData.students[idx].name;
+    selectStudent(idx);
+  }
+
+  function restoreSession() {
+    try {
+      const raw = localStorage.getItem('360_session');
+      if (!raw) return false;
+      const session = JSON.parse(raw);
+      if (session.type === 'admin') {
+        isAdmin = true;
+        enterApp();
+        populateStudentDropdown();
+        selectStudent('agg');
+        return true;
+      }
+      if (session.type === 'student' && session.email) {
+        const idx = reportData.students.findIndex(s => (s.email || '').toLowerCase() === session.email);
+        if (idx === -1) return false;
+        isAdmin = false;
+        enterApp();
+        document.getElementById('navUserName').textContent = reportData.students[idx].name;
+        selectStudent(idx);
+        return true;
+      }
+    } catch (e) { /* ignore */ }
+    return false;
+  }
+
+  function enterApp() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainContent').style.display = '';
+    if (isAdmin) {
+      document.getElementById('navUserName').textContent = 'Admin';
+      document.getElementById('studentSelect').style.display = '';
+    }
+  }
+
   function populateStudentDropdown() {
     const sel = document.getElementById('studentSelect');
+    sel.innerHTML = '';
+    // Aggregate option first
+    const aggOpt = document.createElement('option');
+    aggOpt.value = 'agg';
+    aggOpt.textContent = `— ภาพรวมทุกคน (Aggregate) —`;
+    sel.appendChild(aggOpt);
     reportData.students.forEach((s, i) => {
       const opt = document.createElement('option');
       opt.value = i;
-      opt.textContent = `${s.name}  (${s.nickname})`;
+      opt.textContent = `${s.name}  (${s.nickname || s.email || ''})`;
       sel.appendChild(opt);
     });
-    sel.addEventListener('change', () => selectStudent(+sel.value));
+    sel.addEventListener('change', () => selectStudent(sel.value === 'agg' ? 'agg' : +sel.value));
+  }
+
+  function doLogout() {
+    localStorage.removeItem('360_session');
+    isAdmin = false;
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+    document.getElementById('loginPass').style.display = 'none';
+    document.getElementById('loginError').style.display = 'none';
+    document.getElementById('navUserName').textContent = '';
+    document.getElementById('studentSelect').style.display = 'none';
+    document.getElementById('studentSelect').innerHTML = '';
+    document.getElementById('loginScreen').style.display = 'flex';
+  }
+
+  function buildAggregateStudent() {
+    const students = reportData.students;
+    function avg(arr) {
+      const v = arr.filter(x => x != null);
+      return v.length ? v.reduce((s, x) => s + x, 0) / v.length : null;
+    }
+
+    // Evaluator counts — sum all
+    const ec = { higher: 0, equal: 0, lower: 0, self: 0 };
+    for (const s of students)
+      for (const k of Object.keys(ec))
+        ec[k] += (s.evaluator_counts || {})[k] || 0;
+
+    // theme_averages
+    const thMap = {};
+    for (const s of students)
+      for (const [th, ta] of Object.entries(s.theme_averages || {})) {
+        if (!thMap[th]) thMap[th] = { o: [], s: [] };
+        if (ta.others_avg != null) thMap[th].o.push(ta.others_avg);
+        if (ta.self_avg   != null) thMap[th].s.push(ta.self_avg);
+      }
+    const theme_averages = Object.fromEntries(
+      Object.entries(thMap).map(([th, d]) => [th, { others_avg: avg(d.o), self_avg: avg(d.s) }])
+    );
+
+    // ccl_competencies
+    const cclMap = {};
+    for (const s of students)
+      for (const [th, topics] of Object.entries(s.ccl_competencies || {})) {
+        if (!cclMap[th]) cclMap[th] = {};
+        for (const [topic, td] of Object.entries(topics)) {
+          if (!cclMap[th][topic]) cclMap[th][topic] = { o:[], s:[], h:[], e:[], l:[], qm:{} };
+          const acc = cclMap[th][topic];
+          if (td.others_avg != null) acc.o.push(td.others_avg);
+          if (td.self_avg   != null) acc.s.push(td.self_avg);
+          if (td.higher_avg != null) acc.h.push(td.higher_avg);
+          if (td.equal_avg  != null) acc.e.push(td.equal_avg);
+          if (td.lower_avg  != null) acc.l.push(td.lower_avg);
+          for (const q of (td.questions || [])) {
+            if (!acc.qm[q.qid]) acc.qm[q.qid] = { ...q, o:[], s:[], h:[], e:[], l:[] };
+            const qa = acc.qm[q.qid];
+            if (q.others_avg != null) qa.o.push(q.others_avg);
+            if (q.self       != null) qa.s.push(q.self);
+            if (q.higher_avg != null) qa.h.push(q.higher_avg);
+            if (q.equal_avg  != null) qa.e.push(q.equal_avg);
+            if (q.lower_avg  != null) qa.l.push(q.lower_avg);
+          }
+        }
+      }
+    const ccl_competencies = {};
+    for (const [th, topics] of Object.entries(cclMap)) {
+      ccl_competencies[th] = {};
+      for (const [topic, acc] of Object.entries(topics)) {
+        ccl_competencies[th][topic] = {
+          others_avg: avg(acc.o), self_avg: avg(acc.s),
+          higher_avg: avg(acc.h), equal_avg: avg(acc.e), lower_avg: avg(acc.l),
+          questions: Object.values(acc.qm).map(qa => ({
+            qid: qa.qid, question_en: qa.question_en, question_th: qa.question_th,
+            others_avg: avg(qa.o), self: avg(qa.s),
+            higher_avg: avg(qa.h), equal_avg: avg(qa.e), lower_avg: avg(qa.l),
+            n_others: qa.o.length, reverse: qa.reverse
+          }))
+        };
+      }
+    }
+
+    // team_effectiveness
+    const teMap = {};
+    for (const s of students)
+      for (const d of (s.team_effectiveness || [])) {
+        if (!teMap[d.dimension]) teMap[d.dimension] = { o:[], h:[], e:[], l:[], s:[], qm:{} };
+        const acc = teMap[d.dimension];
+        if (d.others_avg != null) acc.o.push(d.others_avg);
+        if (d.higher_avg != null) acc.h.push(d.higher_avg);
+        if (d.equal_avg  != null) acc.e.push(d.equal_avg);
+        if (d.lower_avg  != null) acc.l.push(d.lower_avg);
+        if (d.self_avg   != null) acc.s.push(d.self_avg);
+        for (const q of (d.questions || [])) {
+          if (!acc.qm[q.qid]) acc.qm[q.qid] = { ...q, o:[], s:[], h:[], e:[], l:[] };
+          const qa = acc.qm[q.qid];
+          if (q.others_avg != null) qa.o.push(q.others_avg);
+          if (q.self       != null) qa.s.push(q.self);
+          if (q.higher_avg != null) qa.h.push(q.higher_avg);
+          if (q.equal_avg  != null) qa.e.push(q.equal_avg);
+          if (q.lower_avg  != null) qa.l.push(q.lower_avg);
+        }
+      }
+    const team_effectiveness = Object.entries(teMap).map(([dimension, acc]) => ({
+      dimension,
+      others_avg: avg(acc.o), higher_avg: avg(acc.h),
+      equal_avg:  avg(acc.e), lower_avg:  avg(acc.l), self_avg: avg(acc.s),
+      questions: Object.values(acc.qm).map(qa => ({
+        qid: qa.qid, question_en: qa.question_en, question_th: qa.question_th,
+        others_avg: avg(qa.o), self: avg(qa.s),
+        higher_avg: avg(qa.h), equal_avg: avg(qa.e), lower_avg: avg(qa.l),
+        n_others: qa.o.length, reverse: qa.reverse
+      }))
+    }));
+
+    return {
+      name: 'ภาพรวมทุกคน',
+      nickname: 'Aggregate',
+      email: null,
+      level: 'aggregate',
+      role: `${students.length} participants`,
+      company: '',
+      evaluator_counts: ec,
+      theme_averages,
+      ccl_competencies,
+      team_effectiveness,
+      open_ended: []
+    };
   }
 
   function selectStudent(idx) {
-    currentStudent = reportData.students[idx];
-    document.getElementById('studentSelect').value = idx;
+    const isAgg = idx === 'agg';
+    currentStudent = isAgg ? buildAggregateStudent() : reportData.students[idx];
+    if (isAdmin) document.getElementById('studentSelect').value = isAgg ? 'agg' : idx;
+    document.getElementById('sec6').style.display = isAgg ? 'none' : '';
     renderProfile();
     renderThemeOverview();
     renderCompetencyDetail();
     renderStrengthsDev();
     renderEdmondson();
-    renderOpenEnded();
+    if (!isAgg) renderOpenEnded();
   }
 
   // ─────────────────────────────────────────────
@@ -1378,7 +1740,10 @@
         const initVal = getPerspVal({others:td.others_avg, higher:td.higher_avg, peer:td.equal_avg, lower:td.lower_avg}, currentPersp);
         html += `
           <div class="topic-row" onclick="toggleTopic(this)">
-            <span class="topic-name">${topicName}</span>
+            <span class="topic-name" style="display:flex;flex-direction:column;gap:1px;white-space:normal;overflow:visible">
+              <span>${topicName}</span>
+              ${TOPIC_DESCRIPTIONS[topicName] ? `<span style="font-size:.72rem;font-weight:400;opacity:.45;line-height:1.3">${TOPIC_DESCRIPTIONS[topicName].en}</span>` : ''}
+            </span>
             ${makeDumbbell(initVal, td.self_avg, `data-topic-persp="${persData}"`, td.others_avg, td.higher_avg, td.equal_avg, td.lower_avg)}
             <i class="bi bi-chevron-down topic-chevron"></i>
           </div>
@@ -1714,9 +2079,13 @@
       }).replace(/"/g, '&quot;');
       const initVal = getPerspVal({others: d.others_avg, higher: d.higher_avg, peer: d.equal_avg, lower: d.lower_avg}, currentPersp);
 
+      const dimDesc = TOPIC_DESCRIPTIONS[d.dimension];
       html += `<div class="theme-block" style="margin-bottom:1rem">
         <div class="topic-row" onclick="toggleTopic(this)" style="border-left:4px solid ${col}">
-          <span class="topic-name" style="color:${col}">${d.dimension}</span>
+          <span class="topic-name" style="display:flex;flex-direction:column;gap:1px;white-space:normal;overflow:visible">
+            <span style="color:${col}">${d.dimension}</span>
+            ${dimDesc ? `<span style="font-size:.72rem;font-weight:400;opacity:.45;line-height:1.3;color:var(--color-text)">${dimDesc.en}</span>` : ''}
+          </span>
           ${makeDumbbell(initVal, d.self_avg, `data-topic-persp="${persData}"`, d.others_avg, d.higher_avg, d.equal_avg, d.lower_avg)}
           <i class="bi bi-chevron-down topic-chevron"></i>
         </div>
