@@ -1666,7 +1666,7 @@
   // ─────────────────────────────────────────────
   function renderEdmondson() {
     const s = currentStudent;
-    const dims = s.edmondson || [];
+    const dims = s.team_effectiveness || s.edmondson || [];
 
     if (!dims.length) {
       document.getElementById('edmondsonContent').innerHTML = '<div class="no-data"><i class="bi bi-info-circle"></i>No Edmondson data available</div>';
